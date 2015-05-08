@@ -1,2 +1,2 @@
 # twittexpress
-twitter and express demo 
+twitter and express and angular demo generated with [https://github.com/DaftMonk/generator-angular-fullstack]

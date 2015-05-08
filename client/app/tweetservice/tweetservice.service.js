@@ -7,7 +7,7 @@ angular.module('twittexpressApp')
         asyncSearch: function(query, since) {	
             var data = {query: query};				
 
-            var queryUrl = '/search';
+            var queryUrl = '/search'; 
             var promise = $http.post(queryUrl, data).then(function (response) {						
                 return response;
             });
