@@ -27,7 +27,7 @@ describe('Service: tweetservice', function () {
         ts = response.data;
       }
     );
-    $httpBackend.expectGET('/search?hashtag=algo')
+    $httpBackend.expectPOST('/search')
           .respond(200, []);
     $httpBackend.flush();
 
