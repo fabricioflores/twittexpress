@@ -5,9 +5,7 @@ describe('Controller: MainCtrl', function () {
   // load the controller's module
   beforeEach(module('twittexpressApp'));
 
-  var MainCtrl,
-      scope,
-      $httpBackend;
+  var MainCtrl, scope, $httpBackend;
 
   // Initialize the controller and a mock scope
   beforeEach(inject(function (_$httpBackend_, $controller, $rootScope) {
@@ -25,4 +23,10 @@ describe('Controller: MainCtrl', function () {
     $httpBackend.flush();
     expect(scope.awesomeThings.length).toBe(4);
   });
+
+  /*
+   * We are going to user websockets to keep a direct connection with the server
+   * we don't mind so let's check if on load we have a working websocket
+   * */
+  
 });
