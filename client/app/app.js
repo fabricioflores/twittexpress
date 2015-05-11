@@ -5,7 +5,8 @@ angular.module('twittexpressApp', [
   'ngResource',
   'ngSanitize',
   'ngRoute',
-  'ui.bootstrap'
+  'ui.bootstrap',
+  'ngWebsocket'
 ])
   .config(function ($routeProvider, $locationProvider) {
     $routeProvider
@@ -14,4 +15,8 @@ angular.module('twittexpressApp', [
       });
 
     $locationProvider.html5Mode(true);
+  })
+  .constant('CONFIG', {
+        host: 'localhost',
+        port: '12345'
   });
