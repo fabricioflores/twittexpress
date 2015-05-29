@@ -23,18 +23,38 @@ describe('Service: tweetservice', function () {
   });
 
   /*
+   * deberia crear un evento on open, para esto necesitamos espiar si el
+   * $on ha sido llamado con '$open'
+   * */
+  it('should get a list of tweets on load', function() {
+    spyOn($websocket, '$new').andReturn({$on: jasmine.createSpy('$on')});
+    tweetservice.init();
+
+    expect($websocket.$new().$on).toHaveBeenCalledWith('$open', jasmine.any(Function));
+    expect($websocket.$new().$on).toHaveBeenCalledWith('$new_tweets', jasmine.any(Function));
+  });
+
+  /*
    * Deberia obtener una lista con n tweets si el
    * websocket tiene algo al levantarse osea $open
    * */
-  it('should set ws.$new on load', function() {
-    expect(false).toBeTruthy();
+  it('should get a list of tweets on load', function() {
+    expect(tweetservice.getTweets()).toBeTruthy();
+  });
+
+  /*
+   * Deberia obtener una lista con n tweets si el
+   * websocket tiene algo al levantarse osea $open
+   * */
+  it('should broadcast a new_tweets if the websocket receives tweets', function() {
+    expect(tweetservice.getTweets()).toBeTruthy();
   });
 
   /*
    * We should have a list of tweets somewhere, empty at the begining
    * */
   it('should have a list of tweets', function() {
-    expect(tweetservice.getTweets).toEqual([]);
+    expect(tweetservice.getTweets()).toEqual([]);
   });
 
   /*

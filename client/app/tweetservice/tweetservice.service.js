@@ -3,6 +3,8 @@
 angular.module('twittexpressApp')
 .service('tweetservice', function ($http, CONFIG, $websocket) {
     var ws;
+    var tls = [];
+
     function init () {
         ws = $websocket.$new('ws://' + CONFIG.host + ':' + CONFIG.port);
 
@@ -11,6 +13,7 @@ angular.module('twittexpressApp')
 
             //TODO:
             // - emit a tweet list request to the server with
+            ws.$emit('get_tweets');
             //   no params
             // - store the tweets in a list of tweets1
 
@@ -23,6 +26,7 @@ angular.module('twittexpressApp')
     }
 
     return {
+        ws: function(){ return ws;},
         init: init,
         asyncSearch: function(query, since) {
             var data = {query: query};
@@ -32,6 +36,7 @@ angular.module('twittexpressApp')
                 return response;
             });
             return promise;
-        }
+        },
+        getTweets: function(){ return tls;}
     };
 });
