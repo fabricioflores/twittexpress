@@ -4,18 +4,20 @@ angular.module('twittexpressApp')
 .service('tweetservice', function ($http, CONFIG, $websocket) {
     var ws;
     var tweetList;
+    var newTweetList;
 
-    function init () {
+    var init = function() {
       ws = $websocket.$new({
         url: 'ws://' + CONFIG.host + ':' + CONFIG.port,
         mock: {
           openTimeout     : 1,
-          closeTimeout    : 8000,
+          closeTimeout    : 100,
           messageInterval : 100,
           fixtures        : {
-            'get_initial_tweets' : {
+            'get_init_tweets' : {
+              event:'init_tweets',
               data: {
-                "statuses":[
+                'statuses':[
                   {
                     "id": 250075927172759551,
                     "text": "text tweet 1"
@@ -64,6 +66,7 @@ angular.module('twittexpressApp')
               }
             },
             'get_new_tweets'    : {
+              event:'new_tweets',
               data: {
                 "statuses":[
                   {
@@ -113,21 +116,21 @@ angular.module('twittexpressApp')
                 }
               }
             }
-        }}
+          }
+        }
       });
 
       ws.$on('$open', function(){
           console.log('the websocket is opened');
-
-          ws.$emit('get_initial_tweets');
+          ws.$emit('get_init_tweets');
           //TODO:
           // - emit a tweet list request to the server with
           //   no params
           // - store the tweets in a list of tweets1
 
-      })
+      });
 
-      ws.$on('get_initial_tweets', function(message){
+      ws.$on('init_tweets', function(message){
 
         tweetList = message;
 
@@ -137,23 +140,30 @@ angular.module('twittexpressApp')
         // - pedir la lista de tweets o tal vez ya vienen como parametro?
       });
 
-      ws.$on('get_new_tweets', function(message){
-        tweetList = message;
+      ws.$on('new_tweets', function(message){
+
+        newTweetList = message;
+
       });
 
     };
 
     var getWs = function(){
-          return ws;
+      return ws;
     };
 
     var getTweets = function(){
-          return tweetList;
+      return tweetList;
+    };
+
+    var getNewTweets = function(){
+      return newTweetList;
     };
 
     return {
         getWs : getWs,
         init : init,
-        getTweets : getTweets
+        getTweets : getTweets,
+        getNewTweets:getNewTweets
     };
 });

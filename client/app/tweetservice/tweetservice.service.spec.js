@@ -16,7 +16,7 @@ describe('Service: tweetservice', function () {
   /*
    * Deberia llamar al websocket service por defecto
    * */
-  it('should set ws.$new on load', function() {
+  iit('should set ws.$new on load', function() {
     spyOn($websocket, '$new').andCallThrough();
     tweetservice.init();
     expect($websocket.$new).toHaveBeenCalled();
@@ -27,12 +27,11 @@ describe('Service: tweetservice', function () {
    * $on ha sido llamado con '$open'
    * */
   iit('should get a list of tweets on load', function() {
-
-
     spyOn($websocket, '$new').andReturn({$on: jasmine.createSpy('$on')});
     tweetservice.init();
     expect($websocket.$new().$on).toHaveBeenCalledWith('$open', jasmine.any(Function));
-    expect($websocket.$new().$on).toHaveBeenCalledWith('get_new_tweets', jasmine.any(Function));
+    expect($websocket.$new().$on).toHaveBeenCalledWith('init_tweets', jasmine.any(Function));
+    expect($websocket.$new().$on).toHaveBeenCalledWith('new_tweets', jasmine.any(Function));
 
   });
 
@@ -56,22 +55,18 @@ describe('Service: tweetservice', function () {
 
   });
 
-  /*
-   * Deberia obtener una lista con n tweets si el
-   * websocket tiene algo al levantarse osea $open
-   * */
-  iit('should broadcast a new_tweets if the websocket receives tweets', function() {
 
+  iit('should broadcast a new_tweets if the websocket receives tweets', function() {
 
     waitsFor(function() {
       tweetservice.init();
-      if(tweetservice.getTweets()){
+      if(tweetservice.getNewTweets()){
         return true;
       }
-    });
+    },1000);
 
     runs(function() {
-      expect(tweetservice.getTweets()).not.toBe('undefined');
+      expect(tweetservice.getNewTweets()).not.toBe('undefined');
     });
 
   });
