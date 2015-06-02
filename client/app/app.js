@@ -18,5 +18,6 @@ angular.module('twittexpressApp', [
   })
   .constant('CONFIG', {
         host: 'localhost',
-        port: '12345'
+        port: '12345',
+        max_tweets: 10
   });
