@@ -3,18 +3,115 @@
 angular.module('twittexpressApp')
 .service('tweetservice', function ($http, CONFIG, $websocket) {
     var ws;
-    var tls = [];
+    var tweetList;
 
     function init () {
       ws = $websocket.$new({
         url: 'ws://' + CONFIG.host + ':' + CONFIG.port,
         mock: {
-          openTimeout: 1,
-          closeTimeout: 8000,
-          messageInterval: 100,
-          fixtures: {
-            'get_initial_tweets': {
-              data: [1,2,3]
+          openTimeout     : 1,
+          closeTimeout    : 8000,
+          messageInterval : 100,
+          fixtures        : {
+            'get_initial_tweets' : {
+              data: {
+                "statuses":[
+                  {
+                    "id": 250075927172759551,
+                    "text": "text tweet 1"
+                  },
+                  {
+                    "id": 250075927172759552,
+                    "text": "text tweet 2"
+                  },
+                  {
+                    "id": 250075927172759553,
+                    "text": "text tweet 3"
+                  },
+                  {
+                    "id": 250075927172759554,
+                    "text": "text tweet 4"
+                  },
+                  {
+                    "id": 250075927172759555,
+                    "text": "text tweet 5"
+                  },
+                  {
+                    "id": 250075927172759556,
+                    "text": "text tweet 6"
+                  },
+                  {
+                    "id": 250075927172759557,
+                    "text": "text tweet 7"
+                  },
+                  {
+                    "id": 250075927172759558,
+                    "text": "text tweet 8"
+                  },
+                  {
+                    "id": 250075927172759559,
+                    "text": "text tweet 9"
+                  },
+                  {
+                    "id": 250075927172759560,
+                    "text": "text tweet 10"
+                  }
+                ],
+                "search_metadata":{
+                  "count": 10,
+                  "query": "%23freebandnames"
+                }
+              }
+            },
+            'get_new_tweets'    : {
+              data: {
+                "statuses":[
+                  {
+                    "id": 250075927172759561,
+                    "text": "text new tweet 1"
+                  },
+                  {
+                    "id": 250075927172759562,
+                    "text": "text new tweet 2"
+                  },
+                  {
+                    "id": 250075927172759563,
+                    "text": "text new tweet 3"
+                  },
+                  {
+                    "id": 250075927172759564,
+                    "text": "text new tweet 4"
+                  },
+                  {
+                    "id": 250075927172759565,
+                    "text": "text new tweet 5"
+                  },
+                  {
+                    "id": 250075927172759566,
+                    "text": "text new tweet 6"
+                  },
+                  {
+                    "id": 250075927172759567,
+                    "text": "text new tweet 7"
+                  },
+                  {
+                    "id": 250075927172759568,
+                    "text": "text new tweet 8"
+                  },
+                  {
+                    "id": 250075927172759569,
+                    "text": "text new tweet 9"
+                  },
+                  {
+                    "id": 250075927172759570,
+                    "text": "text new tweet 10"
+                  }
+                ],
+                "search_metadata":{
+                  "count": 10,
+                  "query": "%23freebandnames"
+                }
+              }
             }
         }}
       });
@@ -22,9 +119,9 @@ angular.module('twittexpressApp')
       ws.$on('$open', function(){
           console.log('the websocket is opened');
 
+          ws.$emit('get_initial_tweets');
           //TODO:
           // - emit a tweet list request to the server with
-          ws.$emit('get_initial_tweets');
           //   no params
           // - store the tweets in a list of tweets1
 
@@ -32,34 +129,31 @@ angular.module('twittexpressApp')
 
       ws.$on('get_initial_tweets', function(message){
 
-        tls = message;
+        tweetList = message;
 
-        ws.$emit('get_new_tweets',{
-            data: [1,2,3,4,5,6,7,8,9,10]
-        });
+        ws.$emit('get_new_tweets');
 
         //TODO
         // - pedir la lista de tweets o tal vez ya vienen como parametro?
       });
 
       ws.$on('get_new_tweets', function(message){
-        tls = message.data;
+        tweetList = message;
       });
 
-    }
+    };
+
+    var getWs = function(){
+          return ws;
+    };
+
+    var getTweets = function(){
+          return tweetList;
+    };
 
     return {
-        getWs: function(){ return ws;},
-        init: init,
-        asyncSearch: function(query, since) {
-            var data = {query: query};
-
-            var queryUrl = '/search';
-            var promise = $http.post(queryUrl, data).then(function (response) {
-                return response;
-            });
-            return promise;
-        },
-        getTweets: function(){ return tls;}
+        getWs : getWs,
+        init : init,
+        getTweets : getTweets
     };
 });

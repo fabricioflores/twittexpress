@@ -44,14 +44,14 @@ describe('Service: tweetservice', function () {
 
     waitsFor(function() {
       tweetservice.init();
-      if(tweetservice.getTweets().length){
+      if(tweetservice.getTweets()){
         return true;
       }
-    });
+    },1000);
 
     runs(function() {
       expect(tweetservice.getWs().$OPEN).toBe(1);
-      expect(tweetservice.getTweets().length === 3).toBe(true);
+      expect(tweetservice.getTweets()).not.toBe('undefined');
     });
 
   });
@@ -65,13 +65,13 @@ describe('Service: tweetservice', function () {
 
     waitsFor(function() {
       tweetservice.init();
-      if(tweetservice.getTweets().length > 3){
+      if(tweetservice.getTweets()){
         return true;
       }
     });
 
     runs(function() {
-      expect(tweetservice.getTweets().length > 3).toBe(true);
+      expect(tweetservice.getTweets()).not.toBe('undefined');
     });
 
   });
