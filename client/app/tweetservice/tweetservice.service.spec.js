@@ -33,7 +33,7 @@ describe('Service: tweetservice', function () {
 
   });
   /*
-   * deberia eliminar el ultimo tweet
+   * deberia retornar  el ultimo tweet
    * */
   iit('should remove ultimate tweet', function() {
     var tweet = {message: 'This is an empty tweet'};
@@ -44,5 +44,14 @@ describe('Service: tweetservice', function () {
     expect(tweetservice.pop()).toEqual(tweet1);
 
   });
+  /*
+  * deberia retornar lista vacia de tweets luego de usar la funcion de borrarlos todos
+  * */
+ iit('should return a empty list of tweets', function() {
+   //testing with empty
+   var tweets = tweetservice.removeAll();
+   expect(tweets.length).toBe(0);
+
+ });
 });
 
