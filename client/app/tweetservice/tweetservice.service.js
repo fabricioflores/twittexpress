@@ -20,7 +20,7 @@ angular.module('twittexpressApp')
 
     }
 
-    function removeAll (argument) {
+    function removeAll () {
       tls = [];
        return tls;
     }
