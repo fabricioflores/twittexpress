@@ -14,12 +14,13 @@ angular.module('twittexpressApp')
         tls.push(tweet);
     }
 
-    function pop(argument) {
-
+    function pop() {
+        return tls.pop();
     }
 
-    function removeAll (argument) {
-      // body...
+    function removeAll () {
+      tls = [];
+       return tls;
     }
 
     function getTweets() {
