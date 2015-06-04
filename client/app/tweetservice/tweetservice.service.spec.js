@@ -31,5 +31,15 @@ describe('Service: tweetservice', function () {
     expect(tweetservice.getTweets().length).toBe(1);
   });
 
+  /*
+   * deberia retornar lista vacia de tweets luego de usar la funcion de borrarlos todos
+   * */
+  iit('should return a empty list of tweets', function() {
+    //testing with empty
+    var tweets = tweetservice.removeAll();
+    expect(tweets.length).toBe(0);
+
+  });
+
 });
 
