@@ -14,16 +14,17 @@ angular.module('twittexpressApp')
       tls.push(tweet);
     }
 
-    function pop(argument) {
-
+    function pop() {
+        return tls.pop();
     }
 
-    function removeAll (argument) {
-      // body...
+    function removeAll () {
+      tls = [];
+       return tls;
     }
 
-    function getTweets(argument) {
-
+    function getTweets() {
+        return tls;
     }
 
     function first () {
@@ -34,7 +35,7 @@ angular.module('twittexpressApp')
         add: add,
         pop: pop,
         first: first,
-        removeAll: removeAll(),
-        getTweets: function(){ return tls;}
+        removeAll: removeAll,
+        getTweets: getTweets
     };
 });
