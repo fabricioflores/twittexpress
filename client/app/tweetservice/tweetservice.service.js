@@ -11,7 +11,7 @@ angular.module('twittexpressApp')
     var tls = [];
 
     function add(tweet) {
-
+      tls.push(tweet);
     }
 
     function pop(argument) {
@@ -26,8 +26,8 @@ angular.module('twittexpressApp')
 
     }
 
-    function first (argument) {
-      // body...
+    function first () {
+      return tls.shift();
     }
 
     return {
