@@ -25,12 +25,13 @@ describe('Service: tweetservice', function () {
   /*
    * deberia agregar un tweet
    * */
-  iit('should add tweets', function() {
+  it('should add tweets', function() {
     var tweet = {message: 'This is an empty tweet'};
     tweetservice.add(tweet);
 
     expect(tweetservice.getTweets().length).toBe(1);
 
   });
+
 });
 

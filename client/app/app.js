@@ -18,5 +18,19 @@ angular.module('twittexpressApp', [
   })
   .constant('CONFIG', {
         host: 'localhost',
-        port: '12345'
-  });
+        port: '12345',
+        maxTweets: 10
+  })
+  .run(function($websocket, CONFIG){
+
+    var ws;
+
+    ws = $websocket.$new({
+      url: 'ws://' + CONFIG.host + ':' + CONFIG.port,
+    });
+
+    ws.$on('$open', function(){
+      console.log('the websocket is opened');
+    });
+
+  })
