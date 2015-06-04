@@ -11,7 +11,7 @@ angular.module('twittexpressApp')
     var tls = [];
 
     function add(tweet) {
-
+        tls.push(tweet);
     }
 
     function pop(argument) {
@@ -23,7 +23,7 @@ angular.module('twittexpressApp')
     }
 
     function getTweets(argument) {
-
+        return tls;
     }
 
     function first (argument) {
@@ -34,7 +34,7 @@ angular.module('twittexpressApp')
         add: add,
         pop: pop,
         first: first,
-        removeAll: removeAll(),
-        getTweets: function(){ return tls;}
+        removeAll: removeAll,
+        getTweets: getTweets
     };
 });
