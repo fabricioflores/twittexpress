@@ -1,42 +1,39 @@
+/*
+ * Tweetservice: this is just a holder for tweets, allows storage and easy retrival
+ * of tweets across the application. Should issue a broadcast when new tweets are
+ * added to it
+ * */
 'use strict';
 
 angular.module('twittexpressApp')
 .service('tweetservice', function ($http, CONFIG, $websocket) {
-    var ws;
     var tls = [];
 
-    function init () {
-        ws = $websocket.$new('ws://' + CONFIG.host + ':' + CONFIG.port);
+    function add(tweet) {
 
-        ws.$on('$open', function(){
-            console.log('the websocket is opened');
+    }
 
-            //TODO:
-            // - emit a tweet list request to the server with
-            ws.$emit('get_tweets');
-            //   no params
-            // - store the tweets in a list of tweets1
+    function pop(argument) {
 
-        });
+    }
 
-        ws.$on('$new_tweets', function(){
-          //TODO
-          // - pedir la lista de tweets o tal vez ya vienen como parametro?
-        });
+    function removeAll (argument) {
+      // body...
+    }
+
+    function getTweets(argument) {
+
+    }
+
+    function first (argument) {
+      // body...
     }
 
     return {
-        ws: function(){ return ws;},
-        init: init,
-        asyncSearch: function(query, since) {
-            var data = {query: query};
-
-            var queryUrl = '/search';
-            var promise = $http.post(queryUrl, data).then(function (response) {
-                return response;
-            });
-            return promise;
-        },
+        add: add,
+        pop: pop,
+        first: first,
+        removeAll: removeAll(),
         getTweets: function(){ return tls;}
     };
 });

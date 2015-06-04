@@ -6,71 +6,31 @@ describe('Service: tweetservice', function () {
   beforeEach(module('twittexpressApp'));
 
   // instantiate service
-  var tweetservice, $websocket;
+  var tweetservice;
 
-  beforeEach(inject(function (_tweetservice_, _$httpBackend_, _$websocket_) {
-    $websocket = _$websocket_;
+  beforeEach(inject(function (_tweetservice_) {
     tweetservice = _tweetservice_;
   }));
 
   /*
-   * Deberia llamar al websocket service por defecto
+   * deberia retornar una lista vacia de tweets
    * */
-  it('should set ws.$new on load', function() {
-    spyOn($websocket, '$new').andCallThrough();
-    tweetservice.init();
-    expect($websocket.$new).toHaveBeenCalled();
+  it('should return 0 tweets from the list', function() {
+    //testing with empty
+    var tweets = tweetservice.getTweets();
+    expect(tweets.length).toBe(0);
+
   });
 
   /*
-   * deberia crear un evento on open, para esto necesitamos espiar si el
-   * $on ha sido llamado con '$open'
+   * deberia agregar un tweet
    * */
-  it('should get a list of tweets on load', function() {
-    spyOn($websocket, '$new').andReturn({$on: jasmine.createSpy('$on')});
-    tweetservice.init();
+  iit('should add tweets', function() {
+    var tweet = {message: 'This is an empty tweet'};
+    tweetservice.add(tweet);
 
-    expect($websocket.$new().$on).toHaveBeenCalledWith('$open', jasmine.any(Function));
-    expect($websocket.$new().$on).toHaveBeenCalledWith('$new_tweets', jasmine.any(Function));
+    expect(tweetservice.getTweets().length).toBe(1);
+
   });
-
-  /*
-   * Deberia obtener una lista con n tweets si el
-   * websocket tiene algo al levantarse osea $open
-   * */
-  it('should get a list of tweets on load', function() {
-    expect(tweetservice.getTweets()).toBeTruthy();
-  });
-
-  /*
-   * Deberia obtener una lista con n tweets si el
-   * websocket tiene algo al levantarse osea $open
-   * */
-  it('should broadcast a new_tweets if the websocket receives tweets', function() {
-    expect(tweetservice.getTweets()).toBeTruthy();
-  });
-
-  /*
-   * We should have a list of tweets somewhere, empty at the begining
-   * */
-  it('should have a list of tweets', function() {
-    expect(tweetservice.getTweets()).toEqual([]);
-  });
-
-  /*
-   * Si el websocket contesta $new_tweets, deberiamos
-   * poder capturarlos y guardarlos en nuestra lista
-   * de tweets
-   * */
-  it('should get tweets on $new_tweets', function() {
-    expect(tweetservice.getTweets().length > 0).toBe(true);
-  });
-
-  /*
-   * If the tweetservice has been configured to hold
-   * 10 tweets, free the space and holds the new tweets
-   * */
-  it('should free the space if maxTweets', inject(function(CONFIG){
-    expect(tweetservice.getTweets().length > CONFIG.maxTweets).toBe(true);
-  }));
 });
+
