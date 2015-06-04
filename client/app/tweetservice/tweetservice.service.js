@@ -11,10 +11,12 @@ angular.module('twittexpressApp')
     var tls = [];
 
     function add(tweet) {
-
+        tls.push(tweet);
     }
 
-    function pop(argument) {
+    function pop() {
+
+        return tls.pop();
 
     }
 
