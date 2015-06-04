@@ -22,12 +22,12 @@ angular.module('twittexpressApp')
       // body...
     }
 
-    function getTweets(argument) {
+    function getTweets() {
         return tls;
     }
 
-    function first (argument) {
-      // body...
+    function first () {
+        return tls.shift();
     }
 
     return {
