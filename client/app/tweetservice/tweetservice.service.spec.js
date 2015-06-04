@@ -32,6 +32,26 @@ describe('Service: tweetservice', function () {
     expect(tweetservice.getTweets().length).toBe(1);
 
   });
+  /*
+   * deberia retornar  el ultimo tweet
+   * */
+  it('should remove ultimate tweet', function() {
+    var tweet = {message: 'This is an empty tweet'};
+    var tweet1 = {message: 'This is an empty tweet1'};
+    //var aux=tweetservice.getTweets().length;
+    tweetservice.add(tweet);
+    tweetservice.add(tweet1);
+    expect(tweetservice.pop()).toEqual(tweet1);
 
+  });
+  /*
+  * deberia retornar lista vacia de tweets luego de usar la funcion de borrarlos todos
+  * */
+ it('should return a empty list of tweets', function() {
+   //testing with empty
+   var tweets = tweetservice.removeAll();
+   expect(tweets.length).toBe(0);
+
+ });
 });
 
