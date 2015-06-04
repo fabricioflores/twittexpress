@@ -36,7 +36,7 @@ angular.module('twittexpressApp')
       });
 
       ws.$on('new_tweets', function(message){
-        console.log('debug: ', message);
+        //console.log('debug: ', message);
         newTweetList = message;
 
       });

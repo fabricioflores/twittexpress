@@ -22,7 +22,7 @@ module.exports = function(config) {
       'client/bower_components/angular-bootstrap/ui-bootstrap-tpls.js',
       'client/bower_components/lodash/dist/lodash.compat.js',
       'client/bower_components/ng-websocket/ng-websocket.js',
-      'client/app/app.js',
+      'client/app/*.js',
       'client/app/**/*.js',
       'client/components/**/*.js',
       'client/app/**/*.html',

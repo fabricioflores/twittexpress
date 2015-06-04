@@ -1,21 +1,26 @@
 'use strict';
 
-describe('Service: tweetservice', function () {
+describe('Test websocket', function () {
 
-  // load the service's module
-  beforeEach(module('twittexpressApp'));
 
-  // instantiate service
-  var tweetservice, $websocket, mockConf, scope;
+    var runWebSocket,
+        $websocket,
+        CONFIG,
+        mockConf,
+        twittexpressMain,
+        ws;
 
-  beforeEach(inject(function (_tweetservice_, _$websocket_, $rootScope) {
-    tweetservice = _tweetservice_;
-    $websocket = _$websocket_;
-    scope = $rootScope.$new();
-    mockConf = {
+    beforeEach(module('twittexpressApp'));
+
+    beforeEach(inject(function (_$websocket_, _CONFIG_) {
+
+      $websocket = _$websocket_;
+      CONFIG = _CONFIG_;
+      twittexpressMain = angular.module('twittexpressApp');
+      runWebSocket = twittexpressMain._runBlocks.shift();
+      mockConf = {
           openTimeout     : 0,
-          closeTimeout    : 0,
-          messageInterval : 0,
+          messageInterval : 100,
           fixtures        : {
             'get_init_tweets'  : {
               event:'init_tweets',
@@ -127,98 +132,15 @@ describe('Service: tweetservice', function () {
                 }
             }
           }
-        }
-  }));
+      }
 
-  /*
-   * Deberia llamar al websocket service por defecto
-   * */
-  it('should set ws.$new on load', function() {
-    spyOn($websocket, '$new').andCallThrough();
-    tweetservice.init(mockConf);
-    expect($websocket.$new).toHaveBeenCalled();
-  });
+    }));
 
-
-  /*
-   * deberia crear un evento on open, para esto necesitamos espiar si el
-   * $on ha sido llamado con '$open'
-   * */
-  it('should get a list of tweets on load', function() {
+  iit('Should $open', function() {
     spyOn($websocket, '$new').andReturn({$on: jasmine.createSpy('$on')});
-    tweetservice.init(mockConf);
+    runWebSocket($websocket,CONFIG);
     expect($websocket.$new().$on).toHaveBeenCalledWith('$open', jasmine.any(Function));
-    expect($websocket.$new().$on).toHaveBeenCalledWith('init_tweets', jasmine.any(Function));
-    expect($websocket.$new().$on).toHaveBeenCalledWith('new_tweets', jasmine.any(Function));
-
-  });
-
-  /*
-   * Deberia obtener una lista con n tweets si el
-   * websocket tiene algo al levantarse osea $open
-   * */
-  it('should get a list of tweets on load', function() {
-
-    //waitsFor(function() {
-      tweetservice.init(mockConf);
-      scope.$digest();
-      scope.$apply();
-      //if(tweetservice.getTweets()){
-        //return true;
-      //}
-    //},1000);
-
-    //runs(function() {
-      expect(tweetservice.getWs().$OPEN).toBe(1);
-      expect(tweetservice.getTweets()).not.toBe(undefined);
-    //});
-
   });
 
 
-  it('should broadcast a new_tweets if the websocket receives tweets', function() {
-
-    waitsFor(function() {
-      tweetservice.init(mockConf);
-      if(tweetservice.getNewTweets()){
-        return true;
-      }
-    },1000);
-
-    runs(function() {
-      expect(tweetservice.getNewTweets()).not.toBe('undefined');
-    });
-
-  });
-
-  /*
-   * We should have a list of tweets somewhere, empty at the begining
-   * */
-  it('should have a list of tweets', function() {
-    expect(true).toEqual(true);
-  });
-
-  /*
-   * Si el websocket contesta $new_tweets, deberiamos
-   * poder capturarlos y guardarlos en nuestra lista
-   * de tweets
-   * */
-  it('should get tweets on $new_tweets', function() {
-    expect(tweetservice.getTweets().length > 0).toBe(true);
-  });
-
-  /*
-   * If the tweetservice has been configured to hold
-   * 10 tweets, free the space and holds the new tweets
-   * */
-  it('should free the space if maxTweets', inject(function(CONFIG){
-
-    waitsFor(function() {
-      tweetservice.init(mockConf);
-      if(tweetservice.getNewTweets()){
-        return true;
-      }
-    },1000);
-    expect(tweetservice.getTweets().length > CONFIG.maxTweets).toBe(true);
-  }));
 });
