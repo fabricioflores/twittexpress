@@ -33,4 +33,4 @@ angular.module('twittexpressApp', [
       console.log('the websocket is opened');
     });
 
-  })
+  });

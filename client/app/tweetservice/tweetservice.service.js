@@ -6,29 +6,29 @@
 'use strict';
 
 angular.module('twittexpressApp')
-.service('tweetservice', function ($http, CONFIG, $websocket) {
+.service('tweetservice', function () {
 
     var tls = [];
 
     function add(tweet) {
-
+        tls.push(tweet);
     }
 
-    function pop(argument) {
-
+    function pop() {
+        return tls.pop();
     }
 
-    function removeAll (argument) {
-        tls = [];
+    function removeAll () {
+      tls = [];
+       return tls;
+    }
+
+    function getTweets() {
         return tls;
     }
 
-    function getTweets(argument) {
-
-    }
-
-    function first (argument) {
-      // body...
+    function first () {
+        return tls.shift();
     }
 
     return {
@@ -36,6 +36,10 @@ angular.module('twittexpressApp')
         pop: pop,
         first: first,
         removeAll: removeAll,
+<<<<<<< HEAD
         getTweets: function(){ return tls;}
+=======
+        getTweets: getTweets
+>>>>>>> b41f951ae9951381dcedf9f069f02c516c180aa2
     };
 });
