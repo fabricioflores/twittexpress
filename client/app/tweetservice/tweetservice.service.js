@@ -6,7 +6,7 @@
 'use strict';
 
 angular.module('twittexpressApp')
-.service('tweetservice', function ($http, CONFIG, $websocket) {
+.service('tweetservice', function () {
 
     var tls = [];
 

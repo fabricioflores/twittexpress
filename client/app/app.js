@@ -40,4 +40,4 @@ angular.module('twittexpressApp', [
       console.log(message.data);
     });
 
-  })
+  });
