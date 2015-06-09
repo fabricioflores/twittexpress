@@ -37,7 +37,7 @@ angular.module('twittexpressApp', [
     });
 
     ws.$on('$message', function(message) {
-      console.log(message.data);
+      console.log(message);
     });
 
   });

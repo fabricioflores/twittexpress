@@ -8,6 +8,10 @@ module.exports = {
             process.env.IP ||
             undefined,
 
+  // WebSocketPort
+  webSocketPort: process.env.WS_PORT ||
+            8081,
+
   // Server port
   port:     process.env.OPENSHIFT_NODEJS_PORT ||
             process.env.PORT ||

@@ -21,6 +21,9 @@ var all = {
   // Server port
   port: process.env.PORT || 9000,
 
+  // WebSocketPort
+  webSocketPort: process.env.WS_PORT || 4444,
+
   // Should we populate the DB with sample data?
   seedDB: false,
 

@@ -7,6 +7,6 @@ module.exports = {
   mongo: {
     uri: 'mongodb://localhost/twittexpress-dev'
   },
-
+  webSocketPort: 4444,
   seedDB: true
 };
