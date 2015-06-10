@@ -8,6 +8,7 @@ var chai = require('chai');
 var sinon = require("sinon");
 var sinonChai = require("sinon-chai");
 var expect = chai.expect;
+var assert = chai.assert;
 var request = require('supertest');
 
 chai.use(sinonChai);
@@ -41,9 +42,7 @@ describe('Server websocket', function() {
       data:'un dato',
       data2:'otro dato'
     });
-
-    expect(spy.called).to.be.true;
-
+    assert.isTrue(spy.called);
     done();
   });
 

@@ -16,6 +16,7 @@ module.exports = function(){
   var onStartWS = function(tweets){
     init(function(ws){
       ws.on('message', function incoming(message) {
+
         console.log('server:',message);
         /*send tweets*/
         ws.send(JSON.stringify(tweets));
