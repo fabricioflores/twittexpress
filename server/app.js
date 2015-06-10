@@ -13,7 +13,9 @@ var ws = require('./components/webSocket/webSocketHandler')();
 // Setup server
 var app = express();
 var server = require('http').createServer(app);
-ws.onStartWS({data:'un dato'});
+
+ws.onStartWS({data:'dato1',data2:'dato2'});
+
 require('./config/express')(app);
 require('./routes')(app);
 

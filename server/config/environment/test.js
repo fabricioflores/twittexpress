@@ -7,5 +7,5 @@ module.exports = {
   mongo: {
     uri: 'mongodb://localhost/twittexpress-test'
   },
-  webSocketPort: {4444}
+  webSocketPort: 4444
 };
