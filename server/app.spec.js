@@ -34,11 +34,19 @@ describe('Server websocket', function() {
 
   });
 
+  /*
+   * QUe hace esto? y que deberia hacer
+   * Cuando levanta la conexión deberia probar:
+   * - verificar que levante una config con parametros del server
+   *   params: wsport, wsip, tiempos de consulta 15 * 60 / 180 por defecto,
+   *           tipo de consulta en general (hoy por defecto, ultimos n,
+   *           desde x fecha)
+   * */
   it.only('should open connection', function(done) {
 
-    var spy = sinon.spy(websocketHandler, "onStartWS");
+    var spy = sinon.spy(websocketHandler, "init");
 
-    websocketHandler.onStartWS({
+    websocketHandler.init({
       data:'un dato',
       data2:'otro dato'
     });
@@ -46,5 +54,13 @@ describe('Server websocket', function() {
     done();
   });
 
+  /*
+   * testear:
+   * - que podamos enviar la lista de recolectados
+   * - que guardemos una lista de tweets en disco
+   * - verificar que el server esta consultando a tweeter de acuerdo al API
+   *   y a las opciones de configuracion
+   * - que permita enviar una config especifica a todos y a cada server
+   **/
 
 });
