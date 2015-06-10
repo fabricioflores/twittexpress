@@ -36,6 +36,10 @@ angular.module('twittexpressApp')
         pop: pop,
         first: first,
         removeAll: removeAll,
+<<<<<<< HEAD
+        getTweets: function(){ return tls;}
+=======
         getTweets: getTweets
+>>>>>>> b41f951ae9951381dcedf9f069f02c516c180aa2
     };
 });
