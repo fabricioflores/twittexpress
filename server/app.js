@@ -9,9 +9,13 @@ process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 
 var express = require('express');
 var config = require('./config/environment');
+var ws = require('./components/webSocket/webSocketHandler')();
 // Setup server
 var app = express();
 var server = require('http').createServer(app);
+
+ws.onStartWS({data:'dato1',data2:'dato2'});
+
 require('./config/express')(app);
 require('./routes')(app);
 
