@@ -27,12 +27,8 @@ describe('Server websocket', function() {
     ws = new WebSocket('ws://localhost:9000');
 
     ws.on('open', function open() {
-      ws.send('something');
-
-    });
-
-    ws.on('message', function(data) {
-      console.log('client:',data);
+      //ws.send('something');
+      console.log('Abriendo el websocket desde el spec:');
       done();
     });
 
@@ -46,7 +42,7 @@ describe('Server websocket', function() {
    *           tipo de consulta en general (hoy por defecto, ultimos n,
    *           desde x fecha)
    * */
-  it.only('should open connection', function(done) {
+  it('should open connection', function(done) {
 
     var spy = sinon.spy(websocketHandler, "init");
 
@@ -60,11 +56,24 @@ describe('Server websocket', function() {
 
   /*
    * testear:
-   * - que podamos enviar la lista de recolectados
    * - que guardemos una lista de tweets en disco
    * - verificar que el server esta consultando a tweeter de acuerdo al API
    *   y a las opciones de configuracion
    * - que permita enviar una config especifica a todos y a cada server
    **/
+
+  /* - que podamos enviar la lista de recolectados*/
+  it.only('get the list of collected tweets from the server', function(done) {
+    var tweet_list;
+    ws.on('message', function(data) {
+      tweet_list = JSON.parse(data);
+
+      expect(tweet_list.length).to.equal(1);
+      done();
+    });
+
+    websocketHandler.init({});
+    ws.send('get_tweets');
+  });
 
 });

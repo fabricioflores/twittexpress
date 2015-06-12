@@ -16,6 +16,7 @@ module.exports = function(server){
   var init = function(tweets){
     connect(function(ws){
       ws.on('message', function incoming(message) {
+        console.log('server:', message);
 
         /*TODO:
          * - Discriminar el mensaje, que cosa nos llego? y que tenemos
@@ -25,13 +26,16 @@ module.exports = function(server){
             case 'case':
                 // code
                 break;
+            case 'get_tweets':
+                ws.send(JSON.stringify(getTweets()));
+                break;
 
             default:
                 // code
+                break;
         }
-        console.log('server:',message);
         /*send tweets*/
-        ws.send(JSON.stringify(tweets));
+        //ws.send(JSON.stringify(tweets));
       });
 
       /*
@@ -45,13 +49,18 @@ module.exports = function(server){
   };
 
   var collectTweetsFromTwitter = function(query, callback){
-    
+
   };
 
   // Guardar los tweets en el disco en algun lado que nos diga config.store
   var saveTweetsToDisk = function(tweets){};
 
   var sendTweets = function(tweets){ /* basicamente usar ws.send stringifiado */ };
+
+  /*PV get the stored tweets */
+  var getTweets = function(){
+    return [{'fix': 'me'}];
+  };
 
   return {
     init: init
