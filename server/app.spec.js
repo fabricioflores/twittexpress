@@ -64,11 +64,12 @@ describe('Server websocket', function() {
 
   /* - que podamos enviar la lista de recolectados*/
   it.only('get the list of collected tweets from the server', function(done) {
+
     var tweet_list;
     ws.on('message', function(data) {
       tweet_list = JSON.parse(data);
 
-      expect(tweet_list.length).to.equal(1);
+      expect(data).to.equal('[{"fix":"me"}]');
       done();
     });
 

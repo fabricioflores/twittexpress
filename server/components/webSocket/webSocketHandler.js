@@ -57,7 +57,7 @@ module.exports = function(server){
 
   var sendTweets = function(tweets){ /* basicamente usar ws.send stringifiado */ };
 
-  /*PV get the stored tweets */
+  /*PV TODO: get the stored tweets */
   var getTweets = function(){
     return [{'fix': 'me'}];
   };
