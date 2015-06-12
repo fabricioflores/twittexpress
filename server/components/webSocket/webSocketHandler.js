@@ -70,7 +70,7 @@ module.exports = function(server){
   ws.send(JSON.stringify(tweets));
   };
 
-  /*PV get the stored tweets */
+  /*PV TODO: get the stored tweets */
   var getTweets = function(){
     return [{'fix': 'me'}];
   };

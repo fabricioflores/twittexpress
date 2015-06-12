@@ -68,7 +68,7 @@ describe('Server websocket', function() {
     ws.on('message', function(data) {
       tweet_list = JSON.parse(data);
 
-      expect(tweet_list.length).to.equal(1);
+      expect(data).to.equal('[{"fix":"me"}]');
       done();
     });
 
