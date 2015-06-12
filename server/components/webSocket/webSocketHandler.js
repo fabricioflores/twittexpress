@@ -24,8 +24,8 @@ module.exports = function(server){
                console.log('mensaje recibido websocket abierto: %s', message);
                for(var i in clients){
                   // Send a message to the client with the message
-                clients[i].sendUTF(JSON.stringify(conf));
-               };
+                clients[i].sendUTF(JSON.stringify(server.config));
+               }
                 break;
 
             default:
@@ -61,7 +61,7 @@ module.exports = function(server){
   };
 
 
-  var sendTweets = function(tweets){
+  var sendTweets = function(ws, tweets){
   /* basicamente usar ws.send stringifiado */
   ws.send(JSON.stringify(tweets));
 };
