@@ -2,12 +2,9 @@
 
 //var config = require('../../config/environment');
 var WebSocketServer = require('ws').Server;
-//var portWS = config.webSocketPort;
 var clients=2;
-
-module.exports = function(config){
-console.log('configuracion del websocket: '+ config);
-  var wss = new WebSocketServer({port: config.webSocketPort});
+module.exports = function(server){
+  var wss = new WebSocketServer({ server: server });
   var connect = function(callback){
     wss.on('connection', function connection(ws) {
       callback(ws);
@@ -51,7 +48,9 @@ console.log('configuracion del websocket: '+ config);
     });
   };
 
-  var collectTweetsFromTwitter = function(query, callback){ };
+  var collectTweetsFromTwitter = function(query, callback){
+
+  };
 
   // Guardar los tweets en el disco en algun lado que nos diga config.store
   var saveTweetsToDisk = function(tweets, callback){

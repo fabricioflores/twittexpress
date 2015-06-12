@@ -2,8 +2,12 @@
 
 var app = require('./app');
 var WebSocket = require('ws');
-var config = require('./config/environment/index');
-var websocketHandler = require('./components/webSocket/webSocketHandler')(config);
+var config = require('./config/environment');
+var server = require('http').createServer(app);
+server.listen(config.port, config.ip, function () {
+  console.log('Express server listening on %d, in %s mode', config.port, app.get('env'));
+});
+var websocketHandler = require('./components/webSocket/webSocketHandler')(server);
 var chai = require('chai');
 var sinon = require("sinon");
 var sinonChai = require("sinon-chai");
@@ -20,7 +24,7 @@ describe('Server websocket', function() {
 
   beforeEach(function(done){
 
-    ws = new WebSocket('ws://localhost:4444');
+    ws = new WebSocket('ws://localhost:9000');
 
     ws.on('open', function open() {
 
