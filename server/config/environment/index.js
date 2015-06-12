@@ -20,6 +20,8 @@ var all = {
 
   // Server port
   port: process.env.PORT || 9000,
+  // Server ip
+  ip: process.env.IP || '127.0.0.1',
 
   // WebSocketPort
   webSocketPort: process.env.WS_PORT || 4444,

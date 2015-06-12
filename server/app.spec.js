@@ -2,8 +2,8 @@
 
 var app = require('./app');
 var WebSocket = require('ws');
-var config = require('./config/environment');
-var websocketHandler = require('./components/webSocket/webSocketHandler')();
+var config = require('./config/environment/index');
+var websocketHandler = require('./components/webSocket/webSocketHandler')(config);
 var chai = require('chai');
 var sinon = require("sinon");
 var sinonChai = require("sinon-chai");
@@ -12,26 +12,27 @@ var assert = chai.assert;
 var request = require('supertest');
 
 chai.use(sinonChai);
-
 describe('Server websocket', function() {
 
   var tweets;
   var ws;
+
 
   beforeEach(function(done){
 
     ws = new WebSocket('ws://localhost:4444');
 
     ws.on('open', function open() {
+
       ws.send('something');
 
     });
 
     ws.on('message', function(data) {
       console.log('client:',data);
-      done();
-    });
 
+    });
+    done();
   });
 
   /*
@@ -44,15 +45,20 @@ describe('Server websocket', function() {
    * */
   it.only('should open connection', function(done) {
 
-    var spy = sinon.spy(websocketHandler, "init");
+    var spy = sinon.spy(ws, 'on');
 
-    websocketHandler.init({
-      data:'un dato',
-      data2:'otro dato'
-    });
-    assert.isTrue(spy.called);
+    //websocketHandler.init(
+    //{
+      //data:'un dato',
+      //data2:'desde el test'
+    //});
+ // ws.init({data:'dato1',data2:'dato2'});
+    //assert.property('on');
+    ws.should.have.property('url');
     done();
   });
+
+
 
   /*
    * testear:
