@@ -16,11 +16,11 @@ var assert = chai.assert;
 var request = require('supertest');
 
 chai.use(sinonChai);
-
 describe('Server websocket', function() {
 
   var tweets;
   var ws;
+
 
   beforeEach(function(done){
 
@@ -31,7 +31,6 @@ describe('Server websocket', function() {
       console.log('Abriendo el websocket desde el spec:');
       done();
     });
-
   });
 
   /*
@@ -42,17 +41,18 @@ describe('Server websocket', function() {
    *           tipo de consulta en general (hoy por defecto, ultimos n,
    *           desde x fecha)
    * */
-  it('should open connection', function(done) {
+  it.only('should open connection', function(done) {
 
-    var spy = sinon.spy(websocketHandler, "init");
-
-    websocketHandler.init({
-      data:'un dato',
-      data2:'otro dato'
-    });
-    assert.isTrue(spy.called);
+    //var spy = sinon.spy(ws, 'on');
+    //ws.should.have.property('url');
+    websocketHandler.init({});
+    var c = websocketHandler.getConfig();
+    assert.equal(c.port, '9000');
+    //expect(c.wsport).toEqual(4444);
     done();
   });
+
+
 
   /*
    * testear:
@@ -63,8 +63,7 @@ describe('Server websocket', function() {
    **/
 
   /* - que podamos enviar la lista de recolectados*/
-  it.only('get the list of collected tweets from the server', function(done) {
-
+  it('get the list of collected tweets from the server', function(done) {
     var tweet_list;
     ws.on('message', function(data) {
       tweet_list = JSON.parse(data);
