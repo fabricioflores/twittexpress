@@ -1,6 +1,6 @@
 'use strict';
 
-//var config = require('../../config/environment');
+var config = require('../../config/environment');
 var WebSocketServer = require('ws').Server;
 var clients=2;
 module.exports = function(server){
@@ -14,6 +14,7 @@ module.exports = function(server){
   var init = function(tweets){
     connect(function(ws){
       ws.on('message', function incoming(message) {
+        console.log('server:', message);
         /*TODO:
          * - Discriminar el mensaje, que cosa nos llego? y que tenemos
          *   que hacer con esto?
@@ -27,13 +28,16 @@ module.exports = function(server){
                 clients[i].sendUTF(JSON.stringify(server.config));
                }
                 break;
+            case 'get_tweets':
+                ws.send(JSON.stringify(getTweets()));
+                break;
 
             default:
                 // code
+                break;
         }
-       //1 console.log('server:',message);
         /*send tweets*/
-        ws.send(JSON.stringify(tweets));
+        //ws.send(JSON.stringify(tweets));
       });
        setTimeout(function timeout() {
           ws.send(Date.now().toString(), {mask: true});
@@ -64,10 +68,18 @@ module.exports = function(server){
   var sendTweets = function(ws, tweets){
   /* basicamente usar ws.send stringifiado */
   ws.send(JSON.stringify(tweets));
-};
+  };
+
+  /*PV get the stored tweets */
+  var getTweets = function(){
+    return [{'fix': 'me'}];
+  };
 
   return {
-    init: init
+    init: init,
+    getConfig: function(){
+      return config;
+    }
   }
 
 };

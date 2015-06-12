@@ -27,16 +27,10 @@ describe('Server websocket', function() {
     ws = new WebSocket('ws://localhost:9000');
 
     ws.on('open', function open() {
-
-      ws.send('something');
-
+      //ws.send('something');
+      console.log('Abriendo el websocket desde el spec:');
+      done();
     });
-
-    ws.on('message', function(data) {
-      console.log('client:',data);
-
-    });
-    done();
   });
 
   /*
@@ -49,16 +43,12 @@ describe('Server websocket', function() {
    * */
   it.only('should open connection', function(done) {
 
-    var spy = sinon.spy(ws, 'on');
-
-    //websocketHandler.init(
-    //{
-      //data:'un dato',
-      //data2:'desde el test'
-    //});
- // ws.init({data:'dato1',data2:'dato2'});
-    //assert.property('on');
-    ws.should.have.property('url');
+    //var spy = sinon.spy(ws, 'on');
+    //ws.should.have.property('url');
+    websocketHandler.init({});
+    var c = websocketHandler.getConfig();
+    assert.equal(c.port, '9000');
+    //expect(c.wsport).toEqual(4444);
     done();
   });
 
@@ -66,11 +56,24 @@ describe('Server websocket', function() {
 
   /*
    * testear:
-   * - que podamos enviar la lista de recolectados
    * - que guardemos una lista de tweets en disco
    * - verificar que el server esta consultando a tweeter de acuerdo al API
    *   y a las opciones de configuracion
    * - que permita enviar una config especifica a todos y a cada server
    **/
+
+  /* - que podamos enviar la lista de recolectados*/
+  it('get the list of collected tweets from the server', function(done) {
+    var tweet_list;
+    ws.on('message', function(data) {
+      tweet_list = JSON.parse(data);
+
+      expect(tweet_list.length).to.equal(1);
+      done();
+    });
+
+    websocketHandler.init({});
+    ws.send('get_tweets');
+  });
 
 });
