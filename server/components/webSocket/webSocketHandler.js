@@ -2,8 +2,8 @@
 
 var config = require('../../config/environment');
 var WebSocketServer = require('ws').Server;
-var Twitter = require('twitter-node-client').Twitter;
-
+var Twit = require('twit');
+var T = new Twit(config);
 var clients=2;
 
 function zfill(num, len) {
@@ -13,7 +13,6 @@ function zfill(num, len) {
 
 module.exports = function(server){
   var wss = new WebSocketServer({ server: server });
-  var twitter = new Twitter(config);
 
   var connect = function(callback){
     wss.on('connection', function connection(ws) {
@@ -23,6 +22,14 @@ module.exports = function(server){
 
   var init = function(tweets){
     connect(function(ws){
+
+      var stream = T.stream('statuses/filter', {
+        track: '#ioetloja'
+      });
+
+      stream.on('tweet', function(tweet) {
+        console.log(tweet);
+      });
 
       ws.on('message', function incoming(message) {
         console.log('server:', message);
