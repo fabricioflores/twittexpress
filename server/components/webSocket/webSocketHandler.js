@@ -6,11 +6,15 @@ var Twitter = require('twitter-node-client').Twitter;
 
 var clients=2;
 
-function zfill(num, len) {return (Array(len).join("0") + num).slice(-len);}
+function zfill(num, len) {
+    var t = new Array(len);
+    return (t.join("0") + num).slice(-len);
+}
 
 module.exports = function(server){
   var wss = new WebSocketServer({ server: server });
   var twitter = new Twitter(config);
+
   var connect = function(callback){
     wss.on('connection', function connection(ws) {
       callback(ws);

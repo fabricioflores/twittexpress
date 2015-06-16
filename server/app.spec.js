@@ -1,3 +1,4 @@
+/*jshint expr: true*/
 'use strict';
 
 var app = require('./app');
@@ -18,7 +19,10 @@ var Twitter = require('twitter-node-client').Twitter;
 
 chai.use(sinonChai);
 
-function zfill(num, len) {return (Array(len).join("0") + num).slice(-len);}
+function zfill(num, len) {
+    var t = new Array(len);
+    return (t.join("0") + num).slice(-len);
+}
 
 describe('Server websocket', function() {
 
