@@ -72,24 +72,54 @@ describe('Server websocket', function() {
       /*
        * We need to mock with sinon what we are asking twitter to do
        * */
-      sinon.stub(Twitter.prototype, 'getSearch', function(o, success, error) {
+      sinon.stub(Twitter.prototype, 'getSearch', function(o, error, success) {
           var today = new Date();
           var since = today.getFullYear() + '-' +
                       zfill(today.getMonth() + 1, 2) + '-' +
                       zfill(today.getDate(), 2);
           expect(o.q).to.equal('@patovala since: ' + since);
+          success('[{}]');
       });
 
-      var tweet_list;
+      //var tweet_list;
       ws.on('message', function(data) {
-          tweet_list = JSON.parse(data);
+          var tweet_list = JSON.parse(data);
+          console.log('debug ', tweet_list, data);
 
-          expect(data).to.equal('[{"fix":"me"}]');
+          expect(tweet_list).to.equal('[{}]');
           done();
       });
 
       websocketHandler.init({});
       ws.send('get_tweets');
   });
+
+  /* test we have our own query when we send it using config */
+
+  it('get the list of tweet from our own query', function(done) {
+      config.query =  '#losHonestosSomosMas';
+      Twitter.prototype.getSearch.restore();
+
+      sinon.stub(Twitter.prototype, 'getSearch', function(o, error, success) {
+          expect(o.q).to.contain('#losHonestosSomosMas');
+          success('[{"some":"thing"}]');
+      });
+
+      //var tweet_list;
+      ws.on('message', function(data) {
+          var tweet_list = JSON.parse(data);
+
+          expect(tweet_list).to.equal('[{"some":"thing"}]');
+          expect(Twitter.prototype.getSearch).to.have.been.called;
+          done();
+      });
+
+      websocketHandler.init({});
+      ws.send('get_tweets');
+  });
+
+  /*
+   * TODO: stub the config to see if :tabne
+   */
 
 });
