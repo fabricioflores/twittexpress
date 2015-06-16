@@ -95,26 +95,28 @@ module.exports = function(server){
 
   /*PV TODO: get the stored tweets */
   var getTweets = function(discriminator){
+    var result = [];
 
     if (!discriminator){
       // return tweets from today
       //1. get todays date
       var today = new Date();
-      var query = config.query || '@patovala ';
-      query += 'since: ' +
+      var query = config.query || '@patovala';
+      query += ' since: ' +
           today.getFullYear() + '-' +
           zfill(today.getMonth() + 1, 2) + '-' +
           zfill(today.getDate(), 2);
-      //twitter.getUserTimeline({ screen_name: 'BoyCook', count: '10'}, error, success);
+
       twitter.getSearch({'q': query , 'count': 10, 'result\_type':'popular'},
-        function (err, response, body) {
+        function error(err, response, body) {
           console.log('ERROR [%s]', err);
         },
-        function(e){
-            // aqui debemos retornar
-        });
+        function success(data){
+            result = data;
+        }
+      );
     }
-    return [{'fix': 'me'}];
+    return result;
   };
 
   return {
