@@ -50,6 +50,14 @@ var all = {
 
 // Export the config object based on the NODE_ENV
 // ==============================================
+try{
+  var credentials = require('./credentials.json') || {};
+}catch(e){
+  console.log('no credentials');
+}
+
+all = _.merge(all, credentials);
+
 module.exports = _.merge(
   all,
   require('./' + process.env.NODE_ENV + '.js') || {});

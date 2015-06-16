@@ -14,6 +14,7 @@ var sinonChai = require("sinon-chai");
 var expect = chai.expect;
 var assert = chai.assert;
 var request = require('supertest');
+var Twitter = require('twitter-node-client').Twitter;
 
 chai.use(sinonChai);
 describe('Server websocket', function() {
@@ -41,7 +42,7 @@ describe('Server websocket', function() {
    *           tipo de consulta en general (hoy por defecto, ultimos n,
    *           desde x fecha)
    * */
-  it.only('should open connection', function(done) {
+  it('should open connection', function(done) {
 
     //var spy = sinon.spy(ws, 'on');
     //ws.should.have.property('url');
@@ -62,18 +63,27 @@ describe('Server websocket', function() {
    * - que permita enviar una config especifica a todos y a cada server
    **/
 
-  /* - que podamos enviar la lista de recolectados*/
+  /* - que podamos enviar la lista de recolectados por defecto quiero
+  * que sean los de este dia*/
   it('get the list of collected tweets from the server', function(done) {
-    var tweet_list;
-    ws.on('message', function(data) {
-      tweet_list = JSON.parse(data);
+      /*
+       * We need to mock with sinon what we are asking twitter to do
+       * */
+      sinon.stub(Twitter.prototype, 'getSearch', function(o, success, error) {
+          console.log('new twitter', o);
+          expect(o.q).to.equal('@patovala since: 2015-05-01');
+      });
 
-      expect(data).to.equal('[{"fix":"me"}]');
-      done();
-    });
+      var tweet_list;
+      ws.on('message', function(data) {
+          tweet_list = JSON.parse(data);
 
-    websocketHandler.init({});
-    ws.send('get_tweets');
+          expect(data).to.equal('[{"fix":"me"}]');
+          done();
+      });
+
+      websocketHandler.init({});
+      ws.send('get_tweets');
   });
 
 });

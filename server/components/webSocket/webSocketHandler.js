@@ -2,9 +2,15 @@
 
 var config = require('../../config/environment');
 var WebSocketServer = require('ws').Server;
+var Twitter = require('twitter-node-client').Twitter;
+
 var clients=2;
+
+function zfill(num, len) {return (Array(len).join("0") + num).slice(-len);}
+
 module.exports = function(server){
   var wss = new WebSocketServer({ server: server });
+  var twitter = new Twitter(config);
   var connect = function(callback){
     wss.on('connection', function connection(ws) {
       callback(ws);
@@ -13,6 +19,7 @@ module.exports = function(server){
 
   var init = function(tweets){
     connect(function(ws){
+
       ws.on('message', function incoming(message) {
         console.log('server:', message);
         /*TODO:
@@ -71,7 +78,27 @@ module.exports = function(server){
   };
 
   /*PV TODO: get the stored tweets */
-  var getTweets = function(){
+  var getTweets = function(discriminator){
+
+    if (!discriminator){
+      // return tweets from today
+      //1. get todays date
+      var today = new Date();
+      var query = config.query || '@patovala ';
+      query += 'since: ' +
+          today.getFullYear() + '-' +
+          zfill(today.getMonth(), 2) + '-' +
+          zfill(today.getDay(), 2);
+      //twitter.getUserTimeline({ screen_name: 'BoyCook', count: '10'}, error, success);
+      twitter.getSearch({'q': query , 'count': 10, 'result\_type':'popular'},
+        function (err, response, body) {
+          console.log('ERROR [%s]', err);
+        },
+        function(e){
+            // aqui debemos retornar
+        });
+      console.log('debug:', today);
+    }
     return [{'fix': 'me'}];
   };
 
