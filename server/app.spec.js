@@ -17,6 +17,9 @@ var request = require('supertest');
 var Twitter = require('twitter-node-client').Twitter;
 
 chai.use(sinonChai);
+
+function zfill(num, len) {return (Array(len).join("0") + num).slice(-len);}
+
 describe('Server websocket', function() {
 
   var tweets;
@@ -70,8 +73,11 @@ describe('Server websocket', function() {
        * We need to mock with sinon what we are asking twitter to do
        * */
       sinon.stub(Twitter.prototype, 'getSearch', function(o, success, error) {
-          console.log('new twitter', o);
-          expect(o.q).to.equal('@patovala since: 2015-05-01');
+          var today = new Date();
+          var since = today.getFullYear() + '-' +
+                      zfill(today.getMonth() + 1, 2) + '-' +
+                      zfill(today.getDate(), 2);
+          expect(o.q).to.equal('@patovala since: ' + since);
       });
 
       var tweet_list;

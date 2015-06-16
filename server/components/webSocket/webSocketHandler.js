@@ -87,8 +87,8 @@ module.exports = function(server){
       var query = config.query || '@patovala ';
       query += 'since: ' +
           today.getFullYear() + '-' +
-          zfill(today.getMonth(), 2) + '-' +
-          zfill(today.getDay(), 2);
+          zfill(today.getMonth() + 1, 2) + '-' +
+          zfill(today.getDate(), 2);
       //twitter.getUserTimeline({ screen_name: 'BoyCook', count: '10'}, error, success);
       twitter.getSearch({'q': query , 'count': 10, 'result\_type':'popular'},
         function (err, response, body) {
@@ -97,7 +97,6 @@ module.exports = function(server){
         function(e){
             // aqui debemos retornar
         });
-      console.log('debug:', today);
     }
     return [{'fix': 'me'}];
   };
