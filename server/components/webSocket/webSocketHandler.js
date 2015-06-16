@@ -2,21 +2,15 @@
 
 var config = require('../../config/environment');
 var WebSocketServer = require('ws').Server;
-<<<<<<< HEAD
 var Configstore = require('configstore');
 var pkg = require('../../../package.json');
 var clients=2;
 var e;
 var conf = new Configstore(pkg.name, {foo: 'bar'});
 var fs = require('fs');
-=======
 var Twitter = require('twitter-node-client').Twitter;
-
 var clients=2;
-
 function zfill(num, len) {return (Array(len).join("0") + num).slice(-len);}
-
->>>>>>> df79a587960f0305b82ebdf46dbe59ce0e89fbd1
 module.exports = function(server){
   var wss = new WebSocketServer({ server: server });
   var twitter = new Twitter(config);
