@@ -7,3 +7,4 @@ dist
 /server/config/local.env.js
 *.sw?
 npm-debug.log
+server/config/environment/credentials.json
