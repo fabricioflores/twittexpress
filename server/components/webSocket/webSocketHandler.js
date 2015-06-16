@@ -2,7 +2,12 @@
 
 var config = require('../../config/environment');
 var WebSocketServer = require('ws').Server;
+var Configstore = require('configstore');
+var pkg = require('../../../package.json');
 var clients=2;
+var e;
+var conf = new Configstore(pkg.name, {foo: 'bar'});
+var fs = require('fs');
 module.exports = function(server){
   var wss = new WebSocketServer({ server: server });
   var connect = function(callback){
@@ -31,8 +36,11 @@ module.exports = function(server){
             case 'get_tweets':
                 ws.send(JSON.stringify(getTweets()));
                 break;
+          case 'saveTweetsToDisks':
+                saveTweetsToDisk();
+                break;
 
-            default:
+          default:
                 // code
                 break;
         }
@@ -57,11 +65,21 @@ module.exports = function(server){
   };
 
   // Guardar los tweets en el disco en algun lado que nos diga config.store
-  var saveTweetsToDisk = function(tweets, callback){
-    var texto = [];
-    texto.push('Tweets:\n');
-    texto.push(tweets);
+  var saveTweetsToDisk = function (){
+  fs.writeFile('./tweets.txt', JSON.stringify(getTweets()), function(err) {
+    conf.set('awesome', JSON.stringify(getTweets()));
+    if( err ){
+        console.log( err );
+        e =false;
+    }
+    else{
+        console.log(conf.get('awesome'));
+        console.log('Se ha escrito correctamente');
+        e = true;
+    }
 
+  })
+    return e;
   };
 
 
@@ -77,9 +95,12 @@ module.exports = function(server){
 
   return {
     init: init,
+    saveTweetsToDisk:saveTweetsToDisk,
+
     getConfig: function(){
       return config;
     }
+
   }
 
 };

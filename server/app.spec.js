@@ -14,7 +14,7 @@ var sinonChai = require("sinon-chai");
 var expect = chai.expect;
 var assert = chai.assert;
 var request = require('supertest');
-
+var currentDate=new Date();
 chai.use(sinonChai);
 describe('Server websocket', function() {
 
@@ -27,7 +27,7 @@ describe('Server websocket', function() {
     ws = new WebSocket('ws://localhost:9000');
 
     ws.on('open', function open() {
-      //ws.send('something');
+     // ws.send('something');
       console.log('Abriendo el websocket desde el spec:');
       done();
     });
@@ -41,27 +41,35 @@ describe('Server websocket', function() {
    *           tipo de consulta en general (hoy por defecto, ultimos n,
    *           desde x fecha)
    * */
-  it.only('should open connection', function(done) {
+  it('should open connection', function(done) {
 
-    //var spy = sinon.spy(ws, 'on');
-    //ws.should.have.property('url');
     websocketHandler.init({});
     var c = websocketHandler.getConfig();
     assert.equal(c.port, '9000');
-    //expect(c.wsport).toEqual(4444);
+    assert.equal(c.ip, '127.0.0.1');
+    assert.equal(c.consultTime, '5');
+    assert.equal(c.query.currentDate, new Date().toJSON().slice(0,10));
     done();
   });
+  //que guardemos una lista de tweets en disco
+  it.only('save the list of tweets on the disk ', function(done) {
+    var tweet_list;
+     ws.on('message', function() {
 
+      assert.equal(websocketHandler.saveTweetsToDisk(), true);
+      done();
+    });
+        websocketHandler.init({});
+    ws.send('saveTweetsToDisks');
+  });
 
-
-  /*
+ /*
    * testear:
-   * - que guardemos una lista de tweets en disco
+   * -
    * - verificar que el server esta consultando a tweeter de acuerdo al API
    *   y a las opciones de configuracion
    * - que permita enviar una config especifica a todos y a cada server
    **/
-
   /* - que podamos enviar la lista de recolectados*/
   it('get the list of collected tweets from the server', function(done) {
     var tweet_list;
