@@ -60,7 +60,7 @@ describe('Server websocket', function() {
     done();
   });
   //que guardemos una lista de tweets en disco
-  it.only('save the list of tweets on the disk ', function(done) {
+  it('save the list of tweets on the disk ', function(done) {
     var tweet_list;
      ws.on('message', function() {
 
@@ -110,7 +110,7 @@ describe('Server websocket', function() {
 
   /* test we have our own query when we send it using config */
 
-  it('get the list of tweet from our own query', function(done) {
+  it.only('get the list of tweet from our own query', function(done) {
       config.query =  '#losHonestosSomosMas';
       Twitter.prototype.getSearch.restore();
 

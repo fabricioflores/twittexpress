@@ -32,9 +32,9 @@ var all = {
   webSocketPort: process.env.WS_PORT || 4444,
 
   //Query
-  query:{
-    currentDate:new Date().toJSON().slice(0,10)
-  },
+  //query:{
+    //currentDate:new Date().toJSON().slice(0,10)
+  //},
 
   // Should we populate the DB with sample data?
   seedDB: false,
