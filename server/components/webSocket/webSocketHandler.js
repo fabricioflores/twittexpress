@@ -4,11 +4,11 @@ var config = require('../../config/environment');
 var WebSocketServer = require('ws').Server;
 var Configstore = require('configstore');
 var pkg = require('../../../package.json');
-var clients=2;
 var e;
 var conf = new Configstore(pkg.name, {foo: 'bar'});
 var fs = require('fs');
-var Twitter = require('twitter-node-client').Twitter;
+var Twit = require('twit');
+var T = new Twit(config);
 var clients=2;
 function zfill(num, len) {
     var t = new Array(len);
@@ -16,7 +16,6 @@ function zfill(num, len) {
 }
 module.exports = function(server){
   var wss = new WebSocketServer({ server: server });
-  var twitter = new Twitter(config);
 
   var connect = function(callback){
     wss.on('connection', function connection(ws) {
@@ -26,6 +25,14 @@ module.exports = function(server){
 
   var init = function(tweets){
     connect(function(ws){
+
+      var stream = T.stream('statuses/filter', {
+        track: '#ioetloja'
+      });
+
+      stream.on('tweet', function(tweet) {
+        console.log(tweet);
+      });
 
       ws.on('message', function incoming(message) {
         console.log('server:', message);
@@ -73,7 +80,7 @@ module.exports = function(server){
 
   };
 
-  // Guardar los tweets en el disco en algun lado que nos diga config.store
+  // Guardar los tweets en el disco en un txt en algun lado que nos diga config.store
   var saveTweetsToDisk = function (){
   fs.writeFile('./tweets.txt', JSON.stringify(getTweets()), function(err) {
     conf.set('awesome', JSON.stringify(getTweets()));

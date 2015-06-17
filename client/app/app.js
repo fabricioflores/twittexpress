@@ -31,9 +31,6 @@ angular.module('twittexpressApp', [
 
     ws.$on('$open', function(){
       console.log('the websocket is opened');
-
-      ws.$emit('evento1','getTweets');
-
     });
 
     ws.$on('$message', function(message) {
