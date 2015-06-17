@@ -16,6 +16,7 @@ var expect = chai.expect;
 var assert = chai.assert;
 var request = require('supertest');
 var Twitter = require('twitter-node-client').Twitter;
+var fs = require('fs');
 
 chai.use(sinonChai);
 
@@ -72,20 +73,14 @@ describe('Server websocket', function() {
 
   /* - que podamos enviar la lista de recolectados por defecto quiero
   * que sean los de este dia*/
-  it('get the list of collected tweets from the server', function(done) {
-      /*
-       * We need to mock with sinon what we are asking twitter to do
-       * */
-      sinon.stub(Twitter.prototype, 'getSearch', function(o, error, success) {
-          var today = new Date();
-          var since = today.getFullYear() + '-' +
-                      zfill(today.getMonth() + 1, 2) + '-' +
-                      zfill(today.getDate(), 2);
-          expect(o.q).to.equal('@patovala since: ' + since);
-          success('[{}]');
-      });
+  it.only('get the list of collected tweets from the server', function(done) {
+      // add some mocked tweets
+      var tweets = [{timestamp: new Date().getTime()}, {timestamp: new Date().getTime()},
+          {timestamp: 12362716271}];
 
-      //var tweet_list;
+      console.log('DEBUG:', websocketHandler);
+
+      var tweet_list;
       ws.on('message', function(data) {
           var tweet_list = JSON.parse(data);
           console.log('debug ', tweet_list, data);
@@ -93,28 +88,25 @@ describe('Server websocket', function() {
           expect(tweet_list).to.equal('[{}]');
           done();
       });
-
-      websocketHandler.init({});
-      ws.send('get_tweets');
   });
 
   /* test we have our own query when we send it using config */
 
   it('get the list of tweet from our own query', function(done) {
       config.query =  '#losHonestosSomosMas';
-      Twitter.prototype.getSearch.restore();
+      //Twitter.prototype.getSearch.restore();
 
-      sinon.stub(Twitter.prototype, 'getSearch', function(o, error, success) {
-          expect(o.q).to.contain('#losHonestosSomosMas');
-          success('[{"some":"thing"}]');
-      });
+      //sinon.stub(Twitter.prototype, 'getSearch', function(o, error, success) {
+      //    expect(o.q).to.contain('#losHonestosSomosMas');
+      //    success('[{"some":"thing"}]');
+      //});
 
       //var tweet_list;
       ws.on('message', function(data) {
           var tweet_list = JSON.parse(data);
 
-          expect(tweet_list).to.equal('[{"some":"thing"}]');
-          expect(Twitter.prototype.getSearch).to.have.been.called;
+          expect(tweet_list).to.equal('[{}]');
+          expect(webSocketHandler.getTweets).to.have.been.called;
           done();
       });
 
