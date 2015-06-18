@@ -124,7 +124,6 @@ module.exports = function(server){
   return {
     init: init,
     saveTweetsToDisk:saveTweetsToDisk,
-
     getConfig: function(){
       return config;
     }
