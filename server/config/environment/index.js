@@ -63,9 +63,10 @@ var all = {
 try{
   var credentials = require('./credentials.json') || {};
 }catch(e){
-  console.log('no credentials');
+  console.log('no credentials.');
+  //prevent error in mocha test
+  var credentials = require('./credentials.example.json')
 }
-
 all = _.merge(all, credentials);
 
 module.exports = _.merge(
