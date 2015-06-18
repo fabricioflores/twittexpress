@@ -2,11 +2,19 @@
 
 var config = require('../../config/environment');
 var WebSocketServer = require('ws').Server;
-var _ = require('lodash');
+var Configstore = require('configstore');
+var pkg = require('../../../package.json');
+var e;
+var conf = new Configstore(pkg.name, {foo: 'bar'});
 var Twit = require('twit');
+var T = new Twit(config);
+function zfill(num, len) {
+    var t = new Array(len);
+    return (t.join("0") + num).slice(-len);
+}
+var _ = require('lodash');
 var clients=2;
 var fs = require('fs');
-
 module.exports = function(server){
   var wss = new WebSocketServer({ server: server });
   var T = new Twit(config);
@@ -63,7 +71,9 @@ module.exports = function(server){
                     case 'get_tweets':
                         ws.send(getTweets());
                     break;
-
+                    case 'saveTweetsToDisks':
+                        saveTweetsToDisk();
+                    break;
                     default:
                         break;
                 }
@@ -77,12 +87,21 @@ module.exports = function(server){
 
   };
 
-  // Guardar los tweets en el disco en algun lado que nos diga config.store
-  var saveTweetsToDisk = function(tweets, callback){
-    var texto = [];
-    texto.push('Tweets:\n');
-    texto.push(tweets);
-
+  // Guardar los tweets en el disco en un txt en algun lado que nos diga config.store
+  var saveTweetsToDisk = function (){
+  fs.writeFile('./tweets.txt', JSON.stringify(getTweets()), function(err) {
+    conf.set('awesome', JSON.stringify(getTweets()));
+    if( err ){
+        console.log( err );
+        e =false;
+    }
+    else{
+        console.log(conf.get('awesome'));
+        console.log('Se ha escrito correctamente');
+        e = true;
+    }
+  })
+    return e;
   };
 
   /* Get the last tweets for today */
@@ -102,9 +121,11 @@ module.exports = function(server){
 
   return {
     init: init,
+    saveTweetsToDisk:saveTweetsToDisk,
     getConfig: function(){
       return config;
     }
+
   }
 
 };

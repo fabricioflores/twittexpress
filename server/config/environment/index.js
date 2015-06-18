@@ -2,6 +2,7 @@
 
 var path = require('path');
 var _ = require('lodash');
+var fecha = '';
 
 function requiredProcessEnv(name) {
   if(!process.env[name]) {
@@ -20,11 +21,20 @@ var all = {
 
   // Server port
   port: process.env.PORT || 9000,
+
   // Server ip
   ip: process.env.IP || '127.0.0.1',
 
+  //Serever consultTime
+  consultTime: process.env.consultTime || 5,
+
   // WebSocketPort
   webSocketPort: process.env.WS_PORT || 4444,
+
+  //Query
+  //query:{
+    //currentDate:new Date().toJSON().slice(0,10)
+  //},
 
   // Should we populate the DB with sample data?
   seedDB: false,

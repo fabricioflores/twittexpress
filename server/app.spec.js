@@ -14,11 +14,11 @@ var sinon = require("sinon");
 var sinonChai = require("sinon-chai");
 var expect = chai.expect;
 var assert = chai.assert;
+var currentDate=new Date();
 //var request = require('supertest');
 var Twit = require('twit');
 //var T = new Twit(config);
 var fs = require('fs');
-
 chai.use(sinonChai);
 
 describe('Server websocket', function() {
@@ -30,7 +30,7 @@ describe('Server websocket', function() {
     ws = new WebSocket('ws://localhost:9000');
 
     ws.on('open', function open() {
-      //ws.send('something');
+     // ws.send('something');
       console.log('Abriendo el websocket desde el spec:');
       done();
     });
@@ -63,20 +63,29 @@ describe('Server websocket', function() {
    * */
   it('should open connection', function(done) {
 
-    //var spy = sinon.spy(ws, 'on');
-    //ws.should.have.property('url');
     websocketHandler.init({});
     var c = websocketHandler.getConfig();
     assert.equal(c.port, '9000');
-    //expect(c.wsport).toEqual(4444);
+    assert.equal(c.ip, '127.0.0.1');
+    assert.equal(c.consultTime, '5');
+   // assert.equal(c.query.currentDate, new Date().toJSON().slice(0,10));
     done();
   });
+  //que guardemos una lista de tweets en disco
+  it.only('save the list of tweets on the disk ', function(done) {
+    var tweet_list;
+     ws.on('message', function() {
 
+      assert.equal(websocketHandler.saveTweetsToDisk(), true);
+      done();
+    });
+        websocketHandler.init();
+    ws.send('saveTweetsToDisks');
+  });
 
-
-  /*
+ /*
    * testear:
-   * - que guardemos una lista de tweets en disco
+   * -
    * - verificar que el server esta consultando a tweeter de acuerdo al API
    *   y a las opciones de configuracion
    * - que permita enviar una config especifica a todos y a cada server
@@ -101,9 +110,9 @@ describe('Server websocket', function() {
   });
 
   /* test we have our own query when we send it using config */
+
   it('change the query', function(done) {
       config.query = '#copaAmerica';
-
       //var tweet_list;
       ws.on('message', function(data) {
           var tweet_list = JSON.parse(data);
