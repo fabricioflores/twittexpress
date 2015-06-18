@@ -14,8 +14,9 @@ var sinon = require("sinon");
 var sinonChai = require("sinon-chai");
 var expect = chai.expect;
 var assert = chai.assert;
-var request = require('supertest');
-var Twitter = require('twitter-node-client').Twitter;
+//var request = require('supertest');
+var Twit = require('twit');
+//var T = new Twit(config);
 var fs = require('fs');
 
 chai.use(sinonChai);
@@ -27,9 +28,7 @@ function zfill(num, len) {
 
 describe('Server websocket', function() {
 
-  var tweets;
-  var ws;
-
+  var ws, tweets, spy;
 
   beforeEach(function(done){
 
@@ -40,6 +39,19 @@ describe('Server websocket', function() {
       console.log('Abriendo el websocket desde el spec:');
       done();
     });
+
+    sinon.stub(fs, 'exists').yields(true);
+    tweets = [{timestamp: new Date().getTime()}, {timestamp: new Date().getTime()},
+                  {timestamp: 12362716271}, {timestamp: 12362716123}];
+    sinon.stub(fs, 'readFile').yields(null, JSON.stringify(tweets));
+
+    spy = sinon.spy(Twit.prototype, 'stream')
+  });
+
+  afterEach(function(done){
+    fs.exists.restore();
+    fs.readFile.restore();
+    done();
   });
 
   /*
@@ -73,49 +85,46 @@ describe('Server websocket', function() {
 
   /* - que podamos enviar la lista de recolectados por defecto quiero
   * que sean los de este dia*/
-  it.only('get the list of collected tweets from the server', function(done) {
-      // add some mocked tweets
-      var tweets = [{timestamp: new Date().getTime()}, {timestamp: new Date().getTime()},
-          {timestamp: 12362716271}];
-
-      console.log('DEBUG:', websocketHandler);
-
+  it('get the list of collected tweets from the server', function(done) {
       var tweet_list;
+
       ws.on('message', function(data) {
           var tweet_list = JSON.parse(data);
-          console.log('debug ', tweet_list, data);
 
-          expect(tweet_list).to.equal('[{}]');
+          expect(fs.exists).to.have.been.called;
+          expect(fs.readFile).to.have.been.called;
+          expect(tweet_list.length).to.equal(2);
           done();
       });
+      websocketHandler.init();
+      ws.send('get_tweets');
   });
 
   /* test we have our own query when we send it using config */
 
-  it('get the list of tweet from our own query', function(done) {
+  it.only('change the query', function(done) {
       config.query =  '#losHonestosSomosMas';
-      //Twitter.prototype.getSearch.restore();
-
-      //sinon.stub(Twitter.prototype, 'getSearch', function(o, error, success) {
-      //    expect(o.q).to.contain('#losHonestosSomosMas');
-      //    success('[{"some":"thing"}]');
+      spy.calledWith('statuses/filter', {track: '#losHonestosSomosMas'})
+      //var spy = sinon.spy(T, "stream");
+      //spy.calledWith('statuses/filter', {track: '#losHonestosSomosMas'})
+      //sinon.stub(Twit.prototype, 'stream', function(t, q) {
+      //    //expect(o.q).to.contain('#losHonestosSomosMas');
+      //    console.log('DEBUG stub', t, q);
       //});
 
       //var tweet_list;
       ws.on('message', function(data) {
           var tweet_list = JSON.parse(data);
 
-          expect(tweet_list).to.equal('[{}]');
-          expect(webSocketHandler.getTweets).to.have.been.called;
+          expect(tweet_list.length).to.equal(2);
+          expect(Twit.prototype.stream).to.have.been.called;
+          expect(spy.calledWith('statuses/filter', {track: '#losHonestosSomosMas'}).called);
+
           done();
       });
 
-      websocketHandler.init({});
+      websocketHandler.init();
       ws.send('get_tweets');
   });
-
-  /*
-   * TODO: stub the config to see if :tabne
-   */
 
 });
