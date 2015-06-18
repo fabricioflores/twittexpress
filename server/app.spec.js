@@ -14,14 +14,11 @@ var sinon = require("sinon");
 var sinonChai = require("sinon-chai");
 var expect = chai.expect;
 var assert = chai.assert;
-var request = require('supertest');
 var currentDate=new Date();
-var Twitter = require('twitter-node-client').Twitter;
-<<<<<<< HEAD
-=======
+//var request = require('supertest');
+var Twit = require('twit');
+//var T = new Twit(config);
 var fs = require('fs');
-
->>>>>>> 23b5f74ceba4355be46497867d76e466a16d21e3
 chai.use(sinonChai);
 
 function zfill(num, len) {
@@ -31,9 +28,7 @@ function zfill(num, len) {
 
 describe('Server websocket', function() {
 
-  var tweets;
-  var ws;
-
+  var ws, tweets, spy;
 
   beforeEach(function(done){
 
@@ -44,6 +39,23 @@ describe('Server websocket', function() {
       console.log('Abriendo el websocket desde el spec:');
       done();
     });
+
+    sinon.stub(fs, 'exists').yields(true);
+    tweets = [{timestamp: new Date().getTime()}, {timestamp: new Date().getTime()},
+                  {timestamp: 12362716271}, {timestamp: 12362716123}];
+    sinon.stub(fs, 'readFile').yields(null, JSON.stringify(tweets));
+
+    spy = sinon.spy(Twit.prototype, 'stream')
+
+    //config for test if we get a query
+    config.query = '#copaAmerica';
+  });
+
+  afterEach(function(done){
+    fs.exists.restore();
+    fs.readFile.restore();
+    Twit.prototype.stream.restore();
+    done();
   });
 
   /*
@@ -61,18 +73,18 @@ describe('Server websocket', function() {
     assert.equal(c.port, '9000');
     assert.equal(c.ip, '127.0.0.1');
     assert.equal(c.consultTime, '5');
-    assert.equal(c.query.currentDate, new Date().toJSON().slice(0,10));
+   // assert.equal(c.query.currentDate, new Date().toJSON().slice(0,10));
     done();
   });
   //que guardemos una lista de tweets en disco
-  it('save the list of tweets on the disk ', function(done) {
+  it.only('save the list of tweets on the disk ', function(done) {
     var tweet_list;
      ws.on('message', function() {
 
       assert.equal(websocketHandler.saveTweetsToDisk(), true);
       done();
     });
-        websocketHandler.init({});
+        websocketHandler.init();
     ws.send('saveTweetsToDisks');
   });
 
@@ -86,65 +98,39 @@ describe('Server websocket', function() {
 
   /* - que podamos enviar la lista de recolectados por defecto quiero
   * que sean los de este dia*/
-<<<<<<< HEAD
-
   it('get the list of collected tweets from the server', function(done) {
-      /*
-       * We need to mock with sinon what we are asking twitter to do
-       * */
-      sinon.stub(Twitter.prototype, 'getSearch', function(o, error, success) {
-          var today = new Date();
-          var since = today.getFullYear() + '-' +
-                      zfill(today.getMonth() + 1, 2) + '-' +
-                      zfill(today.getDate(), 2);
-          expect(o.q).to.equal('@patovala since: ' + since);
-          success('[{}]');
-      });
-=======
-  it.only('get the list of collected tweets from the server', function(done) {
-      // add some mocked tweets
-      var tweets = [{timestamp: new Date().getTime()}, {timestamp: new Date().getTime()},
-          {timestamp: 12362716271}];
->>>>>>> 23b5f74ceba4355be46497867d76e466a16d21e3
-
-      console.log('DEBUG:', websocketHandler);
-
       var tweet_list;
+
       ws.on('message', function(data) {
           var tweet_list = JSON.parse(data);
-          console.log('debug ', tweet_list, data);
 
-          expect(tweet_list).to.equal('[{}]');
+          expect(fs.exists).to.have.been.called;
+          expect(fs.readFile).to.have.been.called;
+          expect(tweet_list.length).to.equal(2);
           done();
       });
+
+      websocketHandler.init();
+      ws.send('get_tweets');
   });
 
   /* test we have our own query when we send it using config */
 
-  it.only('get the list of tweet from our own query', function(done) {
-      config.query =  '#losHonestosSomosMas';
-      //Twitter.prototype.getSearch.restore();
-
-      //sinon.stub(Twitter.prototype, 'getSearch', function(o, error, success) {
-      //    expect(o.q).to.contain('#losHonestosSomosMas');
-      //    success('[{"some":"thing"}]');
-      //});
-
+  it('change the query', function(done) {
+      config.query = '#copaAmerica';
       //var tweet_list;
       ws.on('message', function(data) {
           var tweet_list = JSON.parse(data);
 
-          expect(tweet_list).to.equal('[{}]');
-          expect(webSocketHandler.getTweets).to.have.been.called;
+          expect(tweet_list.length).to.equal(2);
+          expect(Twit.prototype.stream).to.have.been.calledWith(
+              'statuses/filter', {track: "#copaAmerica"});
+
           done();
       });
 
-      websocketHandler.init({});
+      websocketHandler.init();
       ws.send('get_tweets');
   });
-
-  /*
-   * TODO: stub the config to see if :tabne
-   */
 
 });
