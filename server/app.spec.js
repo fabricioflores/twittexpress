@@ -160,7 +160,7 @@ describe('Test part 2', function() {
   });
 
   //que guardemos una lista de tweets en disco
-  it.only('save the list of tweets to disk ', function(done) {
+  it('save the list of tweets to disk ', function(done) {
       websocketHandler.init();
       //var tweet = {message: 'new tweet arrived'};
       //websocketHandler.processTweet(tweet);
