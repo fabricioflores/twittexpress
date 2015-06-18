@@ -40,6 +40,8 @@ module.exports = function(server){
         loadTweets(tweetlog, function(_tweets_){
             tweets = _tweets_;
 
+            console.log('DEBUG:', config.query);
+
             var stream = T.stream('statuses/filter', {
                 track: config.query || '@patovala'
             });

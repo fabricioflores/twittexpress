@@ -46,11 +46,15 @@ describe('Server websocket', function() {
     sinon.stub(fs, 'readFile').yields(null, JSON.stringify(tweets));
 
     spy = sinon.spy(Twit.prototype, 'stream')
+
+    //config for test if we get a query
+    config.query = '#copaAmerica';
   });
 
   afterEach(function(done){
     fs.exists.restore();
     fs.readFile.restore();
+    Twit.prototype.stream.restore();
     done();
   });
 
@@ -96,29 +100,22 @@ describe('Server websocket', function() {
           expect(tweet_list.length).to.equal(2);
           done();
       });
+
       websocketHandler.init();
       ws.send('get_tweets');
   });
 
   /* test we have our own query when we send it using config */
-
-  it.only('change the query', function(done) {
-      config.query =  '#losHonestosSomosMas';
-      spy.calledWith('statuses/filter', {track: '#losHonestosSomosMas'})
-      //var spy = sinon.spy(T, "stream");
-      //spy.calledWith('statuses/filter', {track: '#losHonestosSomosMas'})
-      //sinon.stub(Twit.prototype, 'stream', function(t, q) {
-      //    //expect(o.q).to.contain('#losHonestosSomosMas');
-      //    console.log('DEBUG stub', t, q);
-      //});
+  it('change the query', function(done) {
+      config.query = '#copaAmerica';
 
       //var tweet_list;
       ws.on('message', function(data) {
           var tweet_list = JSON.parse(data);
 
           expect(tweet_list.length).to.equal(2);
-          expect(Twit.prototype.stream).to.have.been.called;
-          expect(spy.calledWith('statuses/filter', {track: '#losHonestosSomosMas'}).called);
+          expect(Twit.prototype.stream).to.have.been.calledWith(
+              'statuses/filter', {track: "#copaAmerica"});
 
           done();
       });
