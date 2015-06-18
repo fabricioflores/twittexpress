@@ -30,8 +30,7 @@ describe('Server websocket', function() {
     ws = new WebSocket('ws://localhost:9000');
 
     ws.on('open', function open() {
-     // ws.send('something');
-      console.log('Abriendo el websocket desde el spec:');
+      //console.log('Abriendo el websocket desde el spec:');
       done();
     });
 
@@ -40,7 +39,9 @@ describe('Server websocket', function() {
                   {timestamp: 12362716271}, {timestamp: 12362716123}];
     sinon.stub(fs, 'readFile').yields(null, JSON.stringify(tweets));
 
-    spy = sinon.spy(Twit.prototype, 'stream')
+    sinon.stub(fs, 'writeFile').yields(null);
+
+    spy = sinon.spy(Twit.prototype, 'stream');
 
     //config for test if we get a query
     config.query = '#copaAmerica';
@@ -49,6 +50,7 @@ describe('Server websocket', function() {
   afterEach(function(done){
     fs.exists.restore();
     fs.readFile.restore();
+    fs.writeFile.restore();
     Twit.prototype.stream.restore();
     done();
   });
@@ -70,17 +72,6 @@ describe('Server websocket', function() {
     assert.equal(c.consultTime, '5');
    // assert.equal(c.query.currentDate, new Date().toJSON().slice(0,10));
     done();
-  });
-  //que guardemos una lista de tweets en disco
-  it.only('save the list of tweets on the disk ', function(done) {
-    var tweet_list;
-     ws.on('message', function() {
-
-      assert.equal(websocketHandler.saveTweetsToDisk(), true);
-      done();
-    });
-        websocketHandler.init();
-    ws.send('saveTweetsToDisks');
   });
 
  /*
@@ -126,6 +117,63 @@ describe('Server websocket', function() {
 
       websocketHandler.init();
       ws.send('get_tweets');
+  });
+
+});
+
+
+describe('Test part 2', function() {
+
+  var ws, tweets, spy_stream, spy, tweet;
+
+  beforeEach(function(done){
+
+    ws = new WebSocket('ws://localhost:9000');
+
+    ws.on('open', function open() {
+     // ws.send('something');
+      console.log('Abriendo el websocket desde el spec:');
+      done();
+    });
+
+    sinon.stub(fs, 'exists').yields(true);
+
+    tweets = [{timestamp: new Date().getTime()}, {timestamp: new Date().getTime()},
+                  {timestamp: 12362716271}, {timestamp: 12362716123}];
+
+    sinon.stub(fs, 'readFile').yields(null, JSON.stringify(tweets));
+
+    tweet = {message: 'good'};
+
+    spy_stream = sinon.spy(Twit.prototype, 'stream');
+
+    spy = sinon.spy(fs, 'writeFile');
+
+  });
+
+  afterEach(function(done){
+    fs.exists.restore();
+    fs.readFile.restore();
+    fs.writeFile.restore();
+    Twit.prototype.stream.restore();
+    done();
+  });
+
+  //que guardemos una lista de tweets en disco
+  it.only('save the list of tweets to disk ', function(done) {
+      websocketHandler.init();
+      //var tweet = {message: 'new tweet arrived'};
+      //websocketHandler.processTweet(tweet);
+      var tweet_trigger = spy_stream.returnValues[0];
+
+      console.log('debug:', tweet_trigger);
+
+      sinon.stub(tweet_trigger, 'on').yields(tweet);
+
+      //expect(tweets.length).to.equal(5);
+      //expect(fs.writeFile).to.have.been.called;
+      expect(Twit.prototype.stream).to.have.been.called;
+      done();
   });
 
 });

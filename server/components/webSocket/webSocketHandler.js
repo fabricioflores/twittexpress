@@ -2,10 +2,8 @@
 
 var config = require('../../config/environment');
 var WebSocketServer = require('ws').Server;
-var Configstore = require('configstore');
 var pkg = require('../../../package.json');
 var e;
-var conf = new Configstore(pkg.name, {foo: 'bar'});
 var Twit = require('twit');
 var T = new Twit(config);
 function zfill(num, len) {
@@ -39,7 +37,7 @@ module.exports = function(server){
               });
           }
       });
-  }
+  };
 
   var init = function(){
     var tweetlog = config.tweetlog || './tweets-log.json';
@@ -54,7 +52,12 @@ module.exports = function(server){
 
             stream.on('tweet', function(tweet) {
                 console.log('debug:', tweet);
-                // TODO save the tweet and try to deliver to the client
+                tweets.push(tweet);
+                fs.writeFile(config.tweetlog || './tweets-log.json', JSON.stringify(tweets), function(err) {
+                    if( err ){
+                        console.log( err );
+                    }
+                });
                 ws.send(tweet, {mask: true});
             });
 
@@ -68,12 +71,14 @@ module.exports = function(server){
                             clients[i].sendUTF(JSON.stringify(server.config));
                         }
                         break;
+
                     case 'get_tweets':
                         ws.send(getTweets());
-                    break;
+                        break;
+
                     case 'saveTweetsToDisks':
-                        saveTweetsToDisk();
-                    break;
+                        break;
+
                     default:
                         break;
                 }
@@ -83,25 +88,8 @@ module.exports = function(server){
 
   };
 
-  var collectTweetsFromTwitter = function(query, callback){
-
-  };
-
-  // Guardar los tweets en el disco en un txt en algun lado que nos diga config.store
-  var saveTweetsToDisk = function (){
-  fs.writeFile('./tweets.txt', JSON.stringify(getTweets()), function(err) {
-    conf.set('awesome', JSON.stringify(getTweets()));
-    if( err ){
-        console.log( err );
-        e =false;
-    }
-    else{
-        console.log(conf.get('awesome'));
-        console.log('Se ha escrito correctamente');
-        e = true;
-    }
-  })
-    return e;
+  // Guardar los tweets en el disco en un txt en algun lado que nos diga config.tweetlog
+  var saveTweet = function(tweet){
   };
 
   /* Get the last tweets for today */
@@ -121,11 +109,9 @@ module.exports = function(server){
 
   return {
     init: init,
-    saveTweetsToDisk:saveTweetsToDisk,
     getConfig: function(){
       return config;
     }
-
   }
 
 };
