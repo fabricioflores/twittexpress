@@ -51,17 +51,15 @@ module.exports = function(server){
             });
 
             ws.on('message', function incoming(message) {
-                console.log('server:', message);
-
                 switch(message) {
                     case 'case':
                         // code
                         console.log('mensaje recibido websocket abierto: %s', message);
-                    for(var i in clients){
-                        // Send a message to the client with the message
-                        clients[i].sendUTF(JSON.stringify(server.config));
-                    }
-                    break;
+                        for(var i in clients){
+                            // Send a message to the client with the message
+                            clients[i].sendUTF(JSON.stringify(server.config));
+                        }
+                        break;
                     case 'get_tweets':
                         ws.send(getTweets());
                     break;

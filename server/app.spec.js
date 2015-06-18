@@ -21,11 +21,6 @@ var fs = require('fs');
 
 chai.use(sinonChai);
 
-function zfill(num, len) {
-    var t = new Array(len);
-    return (t.join("0") + num).slice(-len);
-}
-
 describe('Server websocket', function() {
 
   var ws, tweets, spy;
