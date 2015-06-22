@@ -14,13 +14,23 @@ var app = express();
 var server = require('http').createServer(app);
 require('./config/express')(app);
 require('./routes')(app);
+var Twit = require('twit');
+var T = new Twit(config);
+var WebSocketServer = require('ws').Server;
+
+var webSocketHandler = require('./components/webSocket/webSocketHandler');
 
 server.listen(config.port, config.ip, function () {
   console.log('Express server listening on %d, in %s mode', config.port, app.get('env'));
+  var stream = T.stream('statuses/filter', {
+          track: config.query || '@patovala'
+  });
+
+  var wss = new WebSocketServer({ server: server });
+  var wsh = webSocketHandler(server, wss);
+  wsh.init(stream);
 });
 
-var ws = require('./components/webSocket/webSocketHandler')(server);
-ws.init({data:'dato1',data2:'dato2'});
 
 // Expose app
 exports = module.exports = app;

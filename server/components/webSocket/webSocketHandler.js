@@ -4,18 +4,13 @@ var config = require('../../config/environment');
 var WebSocketServer = require('ws').Server;
 var pkg = require('../../../package.json');
 var e;
-var Twit = require('twit');
-var T = new Twit(config);
-function zfill(num, len) {
-    var t = new Array(len);
-    return (t.join("0") + num).slice(-len);
-}
 var _ = require('lodash');
 var clients=2;
 var fs = require('fs');
-module.exports = function(server){
-  var wss = new WebSocketServer({ server: server });
-  var T = new Twit(config);
+
+module.exports = function(server, wss){
+  //var wss = new WebSocketServer({ server: server });
+  var wss = wss;
 
   var tweets = [];
 
@@ -39,33 +34,29 @@ module.exports = function(server){
       });
   };
 
-  var init = function(){
+  var init = function(stream){
     var tweetlog = config.tweetlog || './tweets-log.json';
 
-    connect(function(ws){
+    connect(function(){
         loadTweets(tweetlog, function(_tweets_){
             tweets = _tweets_;
 
-            var stream = T.stream('statuses/filter', {
-                track: config.query || '@patovala'
-            });
-
             stream.on('tweet', function(tweet) {
-                console.log('debug:', tweet);
                 tweets.push(tweet);
-                fs.writeFile(config.tweetlog || './tweets-log.json', JSON.stringify(tweets), function(err) {
+                fs.writeFile(config.tweetlog || './tweets-log.json',
+                    JSON.stringify(tweets), function(err) {
                     if( err ){
                         console.log( err );
                     }
                 });
-                ws.send(tweet, {mask: true});
+                wss.send(tweet, {mask: true});
             });
 
-            ws.on('message', function incoming(message) {
+            wss.on('message', function incoming(message) {
+                console.log('mensaje recibido websocket abierto: %s', message);
                 switch(message) {
                     case 'case':
                         // code
-                        console.log('mensaje recibido websocket abierto: %s', message);
                         for(var i in clients){
                             // Send a message to the client with the message
                             clients[i].sendUTF(JSON.stringify(server.config));
@@ -73,7 +64,7 @@ module.exports = function(server){
                         break;
 
                     case 'get_tweets':
-                        ws.send(getTweets());
+                        wss.send(getTweets());
                         break;
 
                     case 'saveTweetsToDisks':
@@ -88,10 +79,6 @@ module.exports = function(server){
 
   };
 
-  // Guardar los tweets en el disco en un txt en algun lado que nos diga config.tweetlog
-  var saveTweet = function(tweet){
-  };
-
   /* Get the last tweets for today */
   var getTweets = function(){
     // return tweets from today
@@ -99,6 +86,8 @@ module.exports = function(server){
     var today = new Date();
     // filter tweets for today
     var tls = _.filter(tweets, function(i){
+      if(!i || !i.timestamp) return false;
+
       var tldate = new Date(i.timestamp);
       return _.isEqual([tldate.getDate(), tldate.getFullYear(), tldate.getMonth()],
                        [today.getDate(), today.getFullYear(), today.getMonth()]);

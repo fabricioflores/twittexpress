@@ -421,10 +421,12 @@ module.exports = function (grunt) {
     },
 
     mochaTest: {
-      options: {
-        reporter: 'spec'
-      },
-      src: ['server/**/*.spec.js']
+        test: {
+            options: {
+                reporter: 'spec'
+            },
+            src: ['server/**/*.spec.js']
+        }
     },
 
     protractor: {
@@ -552,7 +554,7 @@ module.exports = function (grunt) {
       return grunt.task.run([
         'env:all',
         'env:test',
-        'mochaTest'
+        'mochaTest:test'
       ]);
     }
 
@@ -580,6 +582,14 @@ module.exports = function (grunt) {
         'protractor'
       ]);
     }
+
+    //else if (target === 'server2') {
+    //  return grunt.task.run([
+    //    'env:all',
+    //    'env:test',
+    //    'mochaTest:websocket'
+    //  ]);
+    //}
 
     else grunt.task.run([
       'test:server',
