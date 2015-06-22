@@ -9,8 +9,6 @@ var clients=2;
 var fs = require('fs');
 
 module.exports = function(server, wss){
-  //var wss = new WebSocketServer({ server: server });
-  var wss = wss;
 
   var tweets = [];
 
