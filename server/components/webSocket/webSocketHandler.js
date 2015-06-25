@@ -7,6 +7,7 @@ var e;
 var _ = require('lodash');
 var clients=2;
 var fs = require('fs');
+var users = {wList: ['patovala','ingemurdok','darwingualito'], bList: ['ingemurdok']};
 
 module.exports = function(server, wss){
 
@@ -40,6 +41,7 @@ module.exports = function(server, wss){
             tweets = _tweets_;
 
             stream.on('tweet', function(tweet) {
+              if (isAuthorized(tweet)){
                 tweets.push(tweet);
                 fs.writeFile(config.tweetlog || './tweets-log.json',
                     JSON.stringify(tweets), function(err) {
@@ -48,6 +50,9 @@ module.exports = function(server, wss){
                     }
                 });
                 wss.send(tweet, {mask: true});
+              }else{
+                console.log('DEBUG: no autorizado')
+              }
             });
 
             wss.on('message', function incoming(message) {
@@ -77,6 +82,20 @@ module.exports = function(server, wss){
 
   };
 
+  var isAuthorized = function(tweet){
+    var uName = tweet.user.screen_name;
+
+    if (_.contains(users.bList, '*')){
+      return false;
+    }else if(_.contains(users.bList, uName)){
+      console.log('DEBUG: usuario ' + uName + ' no Autorizado')
+      return false;
+    }else if(_.contains(users.wList, '*')){
+      return true;
+    }else{
+      return _.contains(users.wList, uName);
+    }
+  };
   /* Get the last tweets for today */
   var getTweets = function(){
     // return tweets from today
