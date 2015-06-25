@@ -107,6 +107,5 @@ describe('Striped off websockethandler', function() {
       assert(spy.calledWith(JSON.stringify(tweets.slice(0,2))), 'Not expected tweets');
       done();
 
-      //mockwss.send('get_tweets');
   });
 });

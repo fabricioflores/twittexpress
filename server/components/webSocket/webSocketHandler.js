@@ -10,7 +10,8 @@ var fs = require('fs');
 
 module.exports = function(server, wss){
 
-  var tweets = [];
+  var tweets = [],
+      stream;
 
   var connect = function(callback){
     wss.on('connection', function (ws) {
@@ -32,8 +33,9 @@ module.exports = function(server, wss){
       });
   };
 
-  var init = function(stream){
+  var init = function(_stream_){
     var tweetlog = config.tweetlog || './tweets-log.json';
+    stream = _stream_;
 
     connect(function(){
         loadTweets(tweetlog, function(_tweets_){
@@ -94,11 +96,17 @@ module.exports = function(server, wss){
     return JSON.stringify(tls);
   };
 
+  /* Set a new stream to get new queries */
+  var setStream = function(s){
+    stream = s;
+  };
+
   return {
     init: init,
     getConfig: function(){
       return config;
-    }
+    },
+    setStream: setStream
   }
 
 };
