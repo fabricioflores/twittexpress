@@ -1,15 +1,17 @@
 sudo: false
 language: node_js
 node_js:
-  - '0.10.32'
-#  - '0.11'
+- 0.10.32
 git:
   depth: 150
 before_script:
-  - npm install -g bower grunt-cli
-  - bower install
+- npm install -g bower grunt-cli
+- bower install
 script:
-  - grunt test:server
-  - grunt jshint
-  - ./node_modules/.bin/karma start --single-run --browsers PhantomJS karma.conf.js
+- grunt test:server
+- grunt jshint
+- "./node_modules/.bin/karma start --single-run --browsers PhantomJS karma.conf.js"
 services: mongodb
+notifications:
+  slack:
+    secure: p5nlYOStBCVSum+edTD8KZmUxoEFH+luLFpstwG+ecWPgWaKnqFDnk8XuCuqYBMLuukJ+Agb4W+bJuc7wUH+3WPyOKbeNKiXo+lCS6RrgNmce3fBugLv8hcxQXx1jhaHWdJ3OFz9B/4ChPGYLrwxQiJriC9LakFMkbo+8fu6x2mdmWTaWGo5Xkg89R6xqcZlsfthc0xKKWJKgaBxb1Cw5NDnpRT+PBCC/K8ZTHxlcxi0K5a+2IpD6zxj5U3mS/nVEAFGFb8vtXkgFsU7bvHxey0Ft5jk6OLMYM31dNsMja2X/jrGwNU48wonNJ993lQYkUNsFL7cpoMMZvoltHYAjHs5OshPxUFaZkdkI4f8MAvrfIK9TOv/ZDUY963zrqNZ0LeF5Fm9TCogeJt1jN0E4lChq97nZM0yCZQNhA9+noOhXakFIHsP0sKeVEEMybmQEWYi3qdjm/NaWH3M6fA35cBjJdbHTLfGsDnVeM+3znMaPTy+Lj8VhZFpHkt17Q4tF3Um6dgJC3BIjeuzVYiUbsFUE/NMxgpjXUENyWZBKKyhLy+8u2GKOiOtOZJlkt+wwXRvFm8r43gEwLaBCUn9ey3AlWco5jkIKk+68GIIijYgPbElYXhq6b3Fu3alEVN8iPTdKSjTTKGsxE9IhH1tqIkJkpHEcs3EzfmTgfUV8wo=
