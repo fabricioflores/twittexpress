@@ -85,7 +85,12 @@ module.exports = function(server, wss){
   };
 
   var isAuthorized = function(tweet){
-    var uName = tweet.user.screen_name;
+    var uName;
+    if (!tweet.user.screen_name){
+      return false;
+    }else{
+      uName = tweet.user.screen_name;
+    }
 
     if (_.contains(users.bList, '*')){
       return false;

@@ -1,4 +1,7 @@
 {
 	"query" : "#ioetloja",
-	"users" : ""
+	"users" : {
+		"wList" : ["patovala", "ingemurdok"],
+		"bList" : ["ingemurdok"]
+	}
 }

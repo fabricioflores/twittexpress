@@ -21,7 +21,7 @@ describe('Striped off websockethandler', function() {
     tweets = [{timestamp: new Date().getTime()}, {timestamp: new Date().getTime()},
                   {timestamp: 12362716271}, {timestamp: 12362716123}];
     //sinon.stub(fs, 'readFile').yields(null, JSON.stringify(tweets));
-    tweet = {message: 'good'};
+    tweet = {message: 'good', user: {screen_name: 'patovala'}};
     config.query = '#copaAmerica';
     config.tweetlog = 'tweets-test.json';
 

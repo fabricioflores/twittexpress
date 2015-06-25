@@ -23,7 +23,7 @@ var webSocketHandler = require('./components/webSocket/webSocketHandler');
 server.listen(config.port, config.ip, function () {
   console.log('Express server listening on %d, in %s mode', config.port, app.get('env'));
   var stream = T.stream('statuses/filter', {
-          track: config.query || '@patovala'
+          track: config.query || '#ioetloja'
   });
 
   var wss = new WebSocketServer({ server: server });
