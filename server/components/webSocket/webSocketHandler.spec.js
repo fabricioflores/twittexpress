@@ -43,7 +43,11 @@ describe('Striped off websockethandler', function() {
   afterEach(function(done){
     fs.exists.restore();
     fs.readFile.restore();
-    fs.unlinkSync('tweets-test.json');
+    fs.exists('tweets-test.json', function(exists){
+        if(exists) {
+            fs.unlinkSync('tweets-test.json');
+        }
+    });
     done();
   });
 
