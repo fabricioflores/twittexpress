@@ -132,10 +132,61 @@ describe('Striped off websockethandler', function() {
 
   });
 
-  /*
-   * TODO: test whiteList: [algo, *], [*]
-   * TODO: test blackList: [*, algo]
-   * TODO: test whiteList: [algo], blackList: [*]
-   * TODO: test whiteList: [algo], blackList: [otro]
-   * */
+  it('should forward an incomming tweet and discriminate it by * user in white list and * user in blackList', function() {
+    var acl = {wList: ['patovala','ingemurdok','darwingualito'], bList: ['ingemurdok']};
+
+    var whitetweet = {'message': 'ok', 'user': {'screen_name': 'algo'}};
+    var spy = sinon.spy(mockwss, 'send');
+
+    wshs.addWhiteListUser('patovala');
+    wshs.addWhiteListUser('*');
+    wshs.addBlackListUser('*');
+    sinon.stub(stream, 'on').yields(whitetweet);
+    wshs.init(stream);
+
+    assert(spy.neverCalledWith(whitetweet), 'not expected tweet');
+
+  });
+
+  it('Deny all tweets by * user in blackList', function() {
+
+    var whitetweet = {'message': 'ok', 'user': {'screen_name': 'patovala'}};
+    var spy = sinon.spy(mockwss, 'send');
+
+    wshs.addWhiteListUser('patovala');
+    wshs.addBlackListUser('*');
+    sinon.stub(stream, 'on').yields(whitetweet);
+    wshs.init(stream);
+
+    assert(spy.neverCalledWith(whitetweet), 'not expected tweet');
+
+  });
+
+  it('Deny a user tweet if user is in white and blackList at same time', function() {
+
+    var whitetweet = {'message': 'ok', 'user': {'screen_name': 'patovala'}};
+    var spy = sinon.spy(mockwss, 'send');
+
+    wshs.addWhiteListUser('patovala');
+    wshs.addBlackListUser('patovala');
+    sinon.stub(stream, 'on').yields(whitetweet);
+    wshs.init(stream);
+
+    assert(spy.neverCalledWith(whitetweet), 'not expected tweet');
+
+  });
+
+  it('Allow a user tweet only if user is in whiteList', function() {
+
+    var whitetweet = {'message': 'ok', 'user': {'screen_name': 'user123'}};
+    var spy = sinon.spy(mockwss, 'send');
+
+    wshs.addWhiteListUser('user123');
+    sinon.stub(stream, 'on').yields(whitetweet);
+    wshs.init(stream);
+
+    assert(spy.calledWith(whitetweet), 'not expected tweet');
+
+  });
+
 });
