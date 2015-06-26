@@ -1,15 +1,17 @@
 sudo: false
 language: node_js
 node_js:
-  - '0.10.32'
-#  - '0.11'
+- 0.10.32
 git:
   depth: 150
 before_script:
-  - npm install -g bower grunt-cli
-  - bower install
+- npm install -g bower grunt-cli
+- bower install
 script:
-  - grunt test:server
-  - grunt jshint
-  - ./node_modules/.bin/karma start --single-run --browsers PhantomJS karma.conf.js
+- grunt test:server
+- grunt jshint
+- "./node_modules/.bin/karma start --single-run --browsers PhantomJS karma.conf.js"
 services: mongodb
+notifications:
+  email: false
+  slack: ioetec:TLYb5yMyn4EbeMVXmqnrPuLC
