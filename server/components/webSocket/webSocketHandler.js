@@ -7,12 +7,12 @@ var e;
 var _ = require('lodash');
 var clients=2;
 var fs = require('fs');
-var users = {wList: ['patovala','ingemurdok','darwingualito'], bList: ['ingemurdok']};
 
 module.exports = function(server, wss){
 
   var tweets = [],
-      stream;
+      stream,
+      acl = {wList: [], bList: []};
 
   var connect = function(callback){
     wss.on('connection', function (ws) {
@@ -34,6 +34,22 @@ module.exports = function(server, wss){
       });
   };
 
+  var forwardTweet = function (tweet) {
+      if (isAuthorized(tweet)){
+          tweets.push(tweet);
+          fs.writeFile(config.tweetlog || './tweets-log.json',
+                       JSON.stringify(tweets), function(err) {
+                           if( err ){
+                               console.log( err );
+                           }
+                       });
+                       wss.send(tweet, {mask: true});
+      }else{
+          console.log('DEBUG: no autorizado', tweet);
+      }
+
+  };
+
   var init = function(_stream_){
     var tweetlog = config.tweetlog || './tweets-log.json';
     stream = _stream_;
@@ -43,18 +59,7 @@ module.exports = function(server, wss){
             tweets = _tweets_;
 
             stream.on('tweet', function(tweet) {
-              if (isAuthorized(tweet)){
-                tweets.push(tweet);
-                fs.writeFile(config.tweetlog || './tweets-log.json',
-                    JSON.stringify(tweets), function(err) {
-                    if( err ){
-                        console.log( err );
-                    }
-                });
-                wss.send(tweet, {mask: true});
-              }else{
-                console.log('DEBUG: no autorizado')
-              }
+              forwardTweet(tweet);
             });
 
             wss.on('message', function incoming(message) {
@@ -85,24 +90,24 @@ module.exports = function(server, wss){
   };
 
   var isAuthorized = function(tweet){
-    var uName;
-    if (!tweet.user.screen_name){
-      return false;
-    }else{
-      uName = tweet.user.screen_name;
-    }
+      var uName;
+      if (!tweet.user.screen_name){
+          return false;
+      }else{
+          uName = tweet.user.screen_name;
+      }
 
-    if (_.contains(users.bList, '*')){
-      return false;
-    }else if(_.contains(users.bList, uName)){
-      console.log('DEBUG: usuario ' + uName + ' no Autorizado')
-      return false;
-    }else if(_.contains(users.wList, '*')){
-      return true;
-    }else{
-      return _.contains(users.wList, uName);
-    }
+      if (_.contains(acl.bList, '*')){
+          return false;
+      }else if(_.contains(acl.bList, uName)){
+          return false;
+      }else if(_.contains(acl.wList, '*')){
+          return true;
+      }else{
+          return _.contains(acl.wList, uName);
+      }
   };
+
   /* Get the last tweets for today */
   var getTweets = function(){
     // return tweets from today
@@ -125,12 +130,23 @@ module.exports = function(server, wss){
     stream = s;
   };
 
+  var addWhiteListUser = function(u){
+    acl.wList.push(u);
+  };
+
+  var addBlackListUser = function(u){
+    acl.bList.push(u);
+  };
+
   return {
     init: init,
     getConfig: function(){
       return config;
     },
-    setStream: setStream
+    setStream: setStream,
+    forwardTweet: forwardTweet,
+    addBlackListUser: addBlackListUser,
+    addWhiteListUser: addWhiteListUser
   }
 
 };

@@ -30,7 +30,6 @@ describe('Striped off websockethandler', function() {
     //});
     stream = {on: function(msg, cb){cb(tweet);}};
 
-    //spy = sinon.spy(fs, 'writeFile');
     mockwss = {on: function(m, cb){cb('get_tweets');}, send: function(){}};
     //sinon.mock(mockwss);
     sinon.stub(fs, 'exists').yields(true);
@@ -42,9 +41,9 @@ describe('Striped off websockethandler', function() {
   });
 
   afterEach(function(done){
-    //fs.writeFile.restore();
     fs.exists.restore();
     fs.readFile.restore();
+    fs.unlinkSync('tweets-test.json');
     done();
   });
 
@@ -71,6 +70,8 @@ describe('Striped off websockethandler', function() {
       var spy = sinon.spy(fs, 'writeFile');
 
       sinon.stub(stream, 'on').yields(tweet);
+
+      wshs.addWhiteListUser('patovala');
       wshs.init(stream);
 
       expect(mockwss.on).to.have.been.called;
@@ -97,6 +98,7 @@ describe('Striped off websockethandler', function() {
   it('get the list of collected tweets from the server', function(done) {
       var tweet_list;
       var spy = sinon.spy(mockwss, 'send');
+      wshs.addWhiteListUser('patovala');
       wshs.init(stream);
       sinon.stub(mockwss, 'on').yields('get_tweets');
 
@@ -108,4 +110,28 @@ describe('Striped off websockethandler', function() {
       done();
 
   });
+
+  /*
+   * Test the acl, this is only one user allowed [patovala]
+   * */
+  it('should forward an incomming tweet from user in white list', function() {
+    var acl = {wList: ['patovala','ingemurdok','darwingualito'], bList: ['ingemurdok']};
+
+    var whitetweet = {'message': 'ok', 'user': {'screen_name': 'patovala'}};
+    var spy = sinon.spy(mockwss, 'send');
+
+    wshs.addWhiteListUser('patovala');
+    sinon.stub(stream, 'on').yields(whitetweet);
+    wshs.init(stream);
+
+    assert(spy.calledWith(whitetweet), 'not expected tweet');
+
+  });
+
+  /*
+   * TODO: test whiteList: [algo, *], [*]
+   * TODO: test blackList: [*, algo]
+   * TODO: test whiteList: [algo], blackList: [*]
+   * TODO: test whiteList: [algo], blackList: [otro]
+   * */
 });
