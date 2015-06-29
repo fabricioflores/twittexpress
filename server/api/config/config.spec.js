@@ -25,7 +25,7 @@ describe('GET /api/configs', function() {
  **/
 describe('POST /api/configs', function() {
 
-  it.only('should save the config locally', function(done) {
+  it('should save the config locally', function(done) {
     request(app)
       .post('/api/configs')
       .set('Content-Type', 'application/json')
@@ -37,8 +37,9 @@ describe('POST /api/configs', function() {
             console.log('error in /api/configs');
             return done(err);
         }
-        console.log(res.body);
-        res.body.should.equal('{resp:"query updated"}');
+        // The response is a JSON already
+        var response = res.body;
+        response.resp.should.equal('query updated');
         done();
       });
   });
@@ -50,7 +51,7 @@ describe('POST /api/configs', function() {
  **/
 describe('POST /api/configs', function() {
 
-  it('should save the config locally', function(done) {
+  it('should save the acl config locally', function(done) {
     request(app)
       .post('/api/configs?acl=whitelist')
       .set('Content-Type', 'application/json')
@@ -62,7 +63,7 @@ describe('POST /api/configs', function() {
             console.log('error in /api/configs?acl=whitelist');
             return done(err);
         }
-        console.log(res.body);
+        console.log('DEBUG', res.body);
         res.body.should.equal('{resp: "user added"}');
         done();
       });

@@ -1,7 +1,1 @@
-{
-	"query" : "#ioetloja",
-	"users" : {
-		"wList" : ["patovala", "ingemurdok"],
-		"bList" : ["ingemurdok"]
-	}
-}
+{"users":{"wList":["patovala","ingemurdok"],"bList":["ingemurdok"]},"query":"#mundial2018"}

@@ -7,16 +7,17 @@ var _ = require('lodash');
 
 // Get list of configs
 exports.index = function(req, res) {
+  var resp = [];
   if (req.method == 'POST') {
-    console.log('config actual:', config);
     var q = req.body;
     config.query = q.query;
-    fs.writeFile('../../config/environment/query.json', JSON.stringify(config), function(err){
+    fs.writeFile('./server/config/environment/query.json', JSON.stringify(config), function(err){
       if(err){
-        console.log('murio');
+        console.log('murio ', err);
       }
-      res.status(200).send({resp: 'query updated'});
+      //res.status(200).send({resp: 'query updated'});
+      resp = {resp: 'query updated'};
+      res.json(resp);
     });
   }
-  res.json([]);
 };
