@@ -19,5 +19,9 @@ exports.index = function(req, res) {
       resp = {resp: 'query updated'};
       res.json(resp);
     });
+  }else if(req.method == 'GET'){
+    if (req.originalUrl == '/api/configs'){
+      res.json(config);
+    }
   }
 };
