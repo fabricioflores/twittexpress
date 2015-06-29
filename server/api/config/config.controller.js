@@ -8,7 +8,7 @@ var _ = require('lodash');
 // Get list of configs
 exports.index = function(req, res) {
   var resp = [];
-  if (req.method == 'POST') {
+  if (req.method === 'POST') {
     var q = req.body;
     config.query = q.query;
     fs.writeFile('./server/config/environment/query.json', JSON.stringify(config), function(err){
@@ -19,8 +19,8 @@ exports.index = function(req, res) {
       resp = {resp: 'query updated'};
       res.json(resp);
     });
-  }else if(req.method == 'GET'){
-    if (req.originalUrl == '/api/configs'){
+  }else if(req.method === 'GET'){
+    if (req.originalUrl === '/api/configs'){
       res.json(config);
     }
   }

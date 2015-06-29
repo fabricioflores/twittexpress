@@ -25,7 +25,7 @@ describe('GET /api/configs', function() {
  **/
 describe('POST /api/configs', function() {
 
-  it.only('should save the config locally', function(done) {
+  it('should save the config locally', function(done) {
     request(app)
       .post('/api/configs')
       .set('Content-Type', 'application/json')
