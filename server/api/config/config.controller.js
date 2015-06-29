@@ -13,9 +13,9 @@ exports.index = function(req, res) {
     config.query = q.query;
     fs.writeFile('./server/config/environment/query.json', JSON.stringify(config), function(err){
       if(err){
-        console.log('murio ', err);
+        console.log('error saving query into config ', err);
       }
-      //res.status(200).send({resp: 'query updated'});
+      // restart the twitter service to change the query
       resp = {resp: 'query updated'};
       res.json(resp);
     });
