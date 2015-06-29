@@ -55,7 +55,7 @@ describe('POST /api/configs', function() {
     request(app)
       .post('/api/configs?acl=whitelist')
       .set('Content-Type', 'application/json')
-      .send({user: 'patovala'})
+      .send({user: 'lmejia'})
       .expect(200)
       .expect('Content-Type', /json/)
       .end(function(err, res) {
@@ -64,7 +64,7 @@ describe('POST /api/configs', function() {
             return done(err);
         }
         console.log('DEBUG', res.body);
-        res.body.should.equal('{resp: "user added"}');
+        res.body.resp.should.equal('user added');
         done();
       });
   });
