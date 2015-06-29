@@ -8,5 +8,6 @@ module.exports = {
     uri: 'mongodb://localhost/twittexpress-dev'
   },
   webSocketPort: 4444,
+  appdata: 'appdata.json',
   seedDB: true
 };

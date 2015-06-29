@@ -3,6 +3,7 @@
 var should = require('should');
 var app = require('../../app');
 var request = require('supertest');
+var fs = require('fs');
 
 describe('GET /api/configs', function() {
 
@@ -20,10 +21,16 @@ describe('GET /api/configs', function() {
 });
 
 /*
- * TODO: salvar las configuraciones y reiniciar
+ * salvar las configuraciones y reiniciar
  *       los servicios
  **/
 describe('POST /api/configs', function() {
+
+  beforeEach(function(done){
+    // create an empty config
+    var appdata = {"users":{"wList":["patovala","ingemurdok","lmejia"],"bList":["ingemurdok"]},"query":"#mundial2018"};
+    fs.writeFile('./server/config/environment/appdata-test.json', JSON.stringify(appdata), done);
+  });
 
   it('should save the config locally', function(done) {
     request(app)
@@ -45,23 +52,21 @@ describe('POST /api/configs', function() {
   });
 
   /*
-   * TODO: We need to check if ACL works, this test is for
+   * We need to check if ACL works, this test is for
    *       checking if addWhiteListUser works
    **/
-  it('should save the acl config locally', function(done) {
+  it('should not allow a repeated user', function(done) {
     request(app)
       .post('/api/configs?acl=whitelist')
       .set('Content-Type', 'application/json')
-      .send({user: 'patovala'})
+      .send({user: 'lmejia'})
       .expect(200)
       .expect('Content-Type', /json/)
       .end(function(err, res) {
         if (err){
-            console.log('error in /api/configs?acl=whitelist');
-            return done(err);
+            console.log('error in /api/configs?acl=whitelist ', err);
         }
-        console.log('DEBUG', res.body);
-        res.body.should.equal('{resp: "user added"}');
+        res.body.resp.should.equal('user already in acl');
         done();
       });
   });
