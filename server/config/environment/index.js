@@ -65,7 +65,8 @@ try{
 }catch(e){
   console.log('no credentials.');
   //prevent error in mocha test
-  var credentials = require('./credentials.example.json')
+  var credentials = require('./credentials.example.json');
+  all.testmode = true;
 }
 all = _.merge(all, credentials);
 

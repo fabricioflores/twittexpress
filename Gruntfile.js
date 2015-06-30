@@ -417,7 +417,7 @@ module.exports = function (grunt) {
     karma: {
       unit: {
         configFile: 'karma.conf.js',
-        singleRun: false
+        singleRun: true
       }
     },
 
@@ -585,8 +585,8 @@ module.exports = function (grunt) {
     }
 
     else grunt.task.run([
-      'test:server',
-      'test:client'
+      'test:client',
+      'test:server'
     ]);
   });
 

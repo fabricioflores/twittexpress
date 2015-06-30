@@ -25,23 +25,26 @@ var EventEmitter = require('events').EventEmitter;
 var emiter = new EventEmitter();
 
 server.listen(config.port, config.ip, function () {
-  console.log('Express server listening on %d, in %s mode',
-              config.port,
-              app.get('env'));
+  console.log('Express server listening on %d, in %s mode', config.port, app.get('env'));
 
-  stream = T.stream('statuses/filter', {
-    track: config.query || '#ioetloja'
-  });
+  if (!config.testmode){
 
-  var wss = new WebSocketServer({ server: server });
-  var wsh = webSocketHandler(server, wss);
-  wsh.init(stream);
+    stream = T.stream('statuses/filter', {
+      track: config.query || '#ioetloja'
+    });
+
+    var wss = new WebSocketServer({ server: server });
+    var wsh = webSocketHandler(server, wss);
+    wsh.init(stream);
+  }
 });
 
 emiter.on('reloadtweeter', function(){
-  stream = T.stream('statuses/filter', {
-    track: config.query || '#ioetloja'
-  });
+  if (!config.testmode){
+    stream = T.stream('statuses/filter', {
+      track: config.query || '#ioetloja'
+    });
+  }
   console.log('stream restarted');
 });
 
