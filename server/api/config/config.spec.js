@@ -32,6 +32,12 @@ describe('POST /api/configs', function() {
     fs.writeFile('./server/config/environment/appdata-test.json', JSON.stringify(appdata), done);
   });
 
+  afterEach(function(done){
+    // restore the config
+    var appdata = {"users":{"wList":["patovala","ingemurdok","lmejia"],"bList":["ingemurdok"]},"query":"#mundial2018"};
+    fs.writeFile('./server/config/environment/appdata-test.json', JSON.stringify(appdata), done);
+  });
+
   it('should save the config locally', function(done) {
     request(app)
       .post('/api/configs')
@@ -67,6 +73,26 @@ describe('POST /api/configs', function() {
             console.log('error in /api/configs?acl=whitelist ', err);
         }
         res.body.resp.should.equal('user already in acl');
+        done();
+      });
+  });
+
+  /*
+   * We need to check if ACL works, this test is for
+   *       checking if addWhiteListUser works
+   **/
+  it('should accept new users', function(done) {
+    request(app)
+      .post('/api/configs?acl=whitelist')
+      .set('Content-Type', 'application/json')
+      .send({user: 'newuser'})
+      .expect(200)
+      .expect('Content-Type', /json/)
+      .end(function(err, res) {
+        if (err){
+            console.log('error in /api/configs?acl=whitelist ', err);
+        }
+        res.body.resp.should.equal('user added');
         done();
       });
   });

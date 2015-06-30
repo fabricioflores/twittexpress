@@ -98,7 +98,8 @@ module.exports = function (grunt) {
       },
       express: {
         files: [
-          'server/**/*.{js,json}'
+          'server/**/*.{js,json}',
+          '!server/config/environment/appdata.json'
         ],
         tasks: ['express:dev', 'wait'],
         options: {
@@ -582,14 +583,6 @@ module.exports = function (grunt) {
         'protractor'
       ]);
     }
-
-    //else if (target === 'server2') {
-    //  return grunt.task.run([
-    //    'env:all',
-    //    'env:test',
-    //    'mochaTest:websocket'
-    //  ]);
-    //}
 
     else grunt.task.run([
       'test:server',

@@ -18,12 +18,19 @@ var Twit = require('twit');
 var T = new Twit(config);
 var WebSocketServer = require('ws').Server;
 
-var webSocketHandler = require('./components/webSocket/webSocketHandler');
+var webSocketHandler = require('./components/webSocket/webSocketHandler'),
+    stream;
+
+var EventEmitter = require('events').EventEmitter;
+var emiter = new EventEmitter();
 
 server.listen(config.port, config.ip, function () {
-  console.log('Express server listening on %d, in %s mode', config.port, app.get('env'));
-  var stream = T.stream('statuses/filter', {
-          track: config.query || '#ioetloja'
+  console.log('Express server listening on %d, in %s mode',
+              config.port,
+              app.get('env'));
+
+  stream = T.stream('statuses/filter', {
+    track: config.query || '#ioetloja'
   });
 
   var wss = new WebSocketServer({ server: server });
@@ -31,6 +38,14 @@ server.listen(config.port, config.ip, function () {
   wsh.init(stream);
 });
 
+emiter.on('reloadtweeter', function(){
+  stream = T.stream('statuses/filter', {
+    track: config.query || '#ioetloja'
+  });
+  console.log('stream restarted');
+});
+
 
 // Expose app
 exports = module.exports = app;
+module.exports.emiter = emiter;
