@@ -97,10 +97,6 @@ describe('POST /api/configs', function() {
         done();
       });
   });
-    /*
-   * We need to check if ACL works, this test is for
-   *       checking if addBlackListUser works
-   **/
   it('should not allow a repeated user in blackList', function(done) {
     request(app)
       .post('/api/configs?acl=blacklist')
