@@ -86,7 +86,7 @@ describe('POST /api/configs', function() {
     request(app)
       .post('/api/configs?acl=whitelist&action=add')
       .set('Content-Type', 'application/json')
-      .send({user: 'newuser'})
+      .send({user: 'pppp'})
       .expect(200)
       .expect('Content-Type', /json/)
       .end(function(err, res) {
@@ -97,7 +97,6 @@ describe('POST /api/configs', function() {
         done();
       });
   });
-
     /*
    * We need to check if ACL works, this test is for
    *       checking if addBlackListUser works

@@ -95,7 +95,6 @@ exports.index = function(req, res) {
                        'action': req.query.action});
           }
         }
-        
       break;
 
       default:
@@ -109,3 +108,4 @@ exports.index = function(req, res) {
     }
   }
 };
+
