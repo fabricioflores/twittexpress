@@ -64,24 +64,8 @@ module.exports = function(server, wss){
 
             wss.on('message', function incoming(message) {
                 console.log('mensaje recibido websocket abierto: %s', message);
-                switch(message) {
-                    case 'case':
-                        // code
-                        for(var i in clients){
-                            // Send a message to the client with the message
-                            clients[i].sendUTF(JSON.stringify(server.config));
-                        }
-                        break;
-
-                    case 'get_tweets':
-                        wss.send(getTweets());
-                        break;
-
-                    case 'saveTweetsToDisks':
-                        break;
-
-                    default:
-                        break;
+                if(message === 'get_tweets'){
+                  wss.send(getTweets());
                 }
             });
         });

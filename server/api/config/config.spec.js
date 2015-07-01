@@ -53,6 +53,7 @@ describe('POST /api/configs', function() {
         // The response is a JSON already
         var response = res.body;
         response.resp.should.equal('query updated');
+        //TODO: test emiter to have been called
         done();
       });
   });
