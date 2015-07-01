@@ -86,7 +86,46 @@ describe('POST /api/configs', function() {
     request(app)
       .post('/api/configs?acl=whitelist')
       .set('Content-Type', 'application/json')
-      .send({user: 'newuser'})
+      .send({user: 'pppp'})
+      .expect(200)
+      .expect('Content-Type', /json/)
+      .end(function(err, res) {
+        if (err){
+            console.log('error in /api/configs?acl=whitelist ', err);
+        }
+        res.body.resp.should.equal('user added');
+        done();
+      });
+  });
+    /*
+   * We need to check if ACL works, this test is for
+   *       checking if addBlackListUser works
+   **/
+  it('should not allow a repeated user in blackList', function(done) {
+    request(app)
+      .post('/api/configs?acl=blacklist')
+      .set('Content-Type', 'application/json')
+      .send({user: 'ingemurdok'})
+      .expect(200)
+      .expect('Content-Type', /json/)
+      .end(function(err, res) {
+        if (err){
+            console.log('error in /api/configs?acl=whitelist ', err);
+        }
+        res.body.resp.should.equal('user already in acl');
+        done();
+      });
+  });
+
+  /*
+   * We need to check if ACL works, this test is for
+   *       checking if addBlackListUser works
+   **/
+  it('should accept new users in blackList', function(done) {
+    request(app)
+      .post('/api/configs?acl=blacklist')
+      .set('Content-Type', 'application/json')
+      .send({user: 'mmichay'})
       .expect(200)
       .expect('Content-Type', /json/)
       .end(function(err, res) {
