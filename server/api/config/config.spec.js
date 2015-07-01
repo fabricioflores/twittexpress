@@ -62,9 +62,9 @@ describe('POST /api/configs', function() {
    * We need to check if ACL works, this test is for
    *       checking if addWhiteListUser works
    **/
-  it('should not allow a repeated user', function(done) {
+  it('should not allow a repeated user in whitelist', function(done) {
     request(app)
-      .post('/api/configs?acl=whitelist')
+      .post('/api/configs?acl=whitelist&action=add')
       .set('Content-Type', 'application/json')
       .send({user: 'lmejia'})
       .expect(200)
@@ -82,9 +82,9 @@ describe('POST /api/configs', function() {
    * We need to check if ACL works, this test is for
    *       checking if addWhiteListUser works
    **/
-  it('should accept new users', function(done) {
+  it('should accept new users in whitelist', function(done) {
     request(app)
-      .post('/api/configs?acl=whitelist')
+      .post('/api/configs?acl=whitelist&action=add')
       .set('Content-Type', 'application/json')
       .send({user: 'newuser'})
       .expect(200)
@@ -94,6 +94,127 @@ describe('POST /api/configs', function() {
             console.log('error in /api/configs?acl=whitelist ', err);
         }
         res.body.resp.should.equal('user added');
+        done();
+      });
+  });
+
+    /*
+   * We need to check if ACL works, this test is for
+   *       checking if addBlackListUser works
+   **/
+  it('should accept new users in blacklist', function(done) {
+    request(app)
+      .post('/api/configs?acl=blacklist&action=add')
+      .set('Content-Type', 'application/json')
+      .send({user: 'newuser'})
+      .expect(200)
+      .expect('Content-Type', /json/)
+      .end(function(err, res) {
+        if (err){
+            console.log('error in /api/configs?acl=blacklist ', err);
+        }
+        res.body.resp.should.equal('user added');
+        done();
+      });
+  });
+  /*
+   * We need to check if ACL works, this test is for
+   *       checking if addWhiteListUser works
+   **/
+  it('should not allow a repeated user in blacklist', function(done) {
+    request(app)
+      .post('/api/configs?acl=blacklist&action=add')
+      .set('Content-Type', 'application/json')
+      .send({user: 'ingemurdok'})
+      .expect(200)
+      .expect('Content-Type', /json/)
+      .end(function(err, res) {
+        if (err){
+            console.log('error in /api/configs?acl=blacklist', err);
+        }
+        res.body.resp.should.equal('user already in acl');
+        done();
+      });
+  });
+
+  /***************************************************************************************
+  ***************************************************************************************/
+  /*
+   * We need to check if ACL works, this test is for
+   *       checking if removeWhiteListUser works
+   **/
+
+  it('should remove a user if exists in whitelist', function(done) {
+    request(app)
+      .post('/api/configs?acl=whitelist&action=remove')
+      .set('Content-Type', 'application/json')
+      .send({user: 'lmejia'})
+      .expect(200)
+      .expect('Content-Type', /json/)
+      .end(function(err, res) {
+        if (err){
+            console.log('error in /api/configs?acl=whitelist ', err);
+        }
+        res.body.resp.should.equal('user removed');
+        done();
+      });
+  });
+
+  /*
+   * We need to check if ACL works, this test is for
+   *       checking if removeWhiteListUser works
+   **/
+  it('should not remove a user if not exist in whitelist', function(done) {
+    request(app)
+      .post('/api/configs?acl=whitelist&action=remove')
+      .set('Content-Type', 'application/json')
+      .send({user: 'newusertoberemoved'})
+      .expect(200)
+      .expect('Content-Type', /json/)
+      .end(function(err, res) {
+        if (err){
+            console.log('error in /api/configs?acl=whitelist ', err);
+        }
+        res.body.resp.should.equal('user not exists in acl');
+        done();
+      });
+  });
+
+    /*
+   * We need to check if ACL works, this test is for
+   *       checking if removeBlackListUser works
+   **/
+  it('should remove a user if exist in blacklist', function(done) {
+    request(app)
+      .post('/api/configs?acl=blacklist&action=remove')
+      .set('Content-Type', 'application/json')
+      .send({user: 'ingemurdok'})
+      .expect(200)
+      .expect('Content-Type', /json/)
+      .end(function(err, res) {
+        if (err){
+            console.log('error in /api/configs?acl=blacklist ', err);
+        }
+        res.body.resp.should.equal('user removed');
+        done();
+      });
+  });
+  /*
+   * We need to check if ACL works, this test is for
+   *       checking if removeWhiteListUser works
+   **/
+  it('should not remove a user if not exists in blacklist', function(done) {
+    request(app)
+      .post('/api/configs?acl=blacklist&action=remove')
+      .set('Content-Type', 'application/json')
+      .send({user: 'newBlackListUser'})
+      .expect(200)
+      .expect('Content-Type', /json/)
+      .end(function(err, res) {
+        if (err){
+            console.log('error in /api/configs?acl=blacklist', err);
+        }
+        res.body.resp.should.equal('user not exists in acl');
         done();
       });
   });
