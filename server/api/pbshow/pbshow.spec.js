@@ -8,7 +8,7 @@ describe('GET /api/pbshows', function() {
 
   it('should have slides when called', function(done) {
     request(app)
-      .get('/api/pbshows')
+      .get('/api/pbshow')
       .expect(200)
       .expect('Content-Type', /json/)
       .end(function(err, res) {

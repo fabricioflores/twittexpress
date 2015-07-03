@@ -30,10 +30,6 @@ angular.module('twittexpressApp')
             QueueService.loadManifest();
         }
 
-        function getTweet(){
-
-        }
-
         $scope.$on('queueProgress', function (event, queueProgress) {
             $scope.$apply(function () {
                 $scope.progress = queueProgress.progress * 100;

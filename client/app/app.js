@@ -1,4 +1,5 @@
 'use strict';
+/* globals TimelineLite, Ease */
 
 var app = angular.module('twittexpressApp', [
   'ngAnimate',
