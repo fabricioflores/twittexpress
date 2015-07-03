@@ -25,8 +25,11 @@ var webSocketHandler = require('./components/webSocket/webSocketHandler'),
 var EventEmitter = require('events').EventEmitter;
 var emiter = new EventEmitter();
 
+var path = require('path');
+
 server.listen(config.port, config.ip, function () {
   var env = app.get('env');
+
   console.log('Express server listening on %d, in %s mode', config.port, env);
 
   if (!config.testmode){

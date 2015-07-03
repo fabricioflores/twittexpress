@@ -23,7 +23,7 @@ var app = angular.module('twittexpressApp', [
       maxTweets: 10
 })
 .constant('configuration',{
-  'manifestUrl': '/pbshow' // where to get slides
+  'manifestUrl': '/api/pbshow' // where to get slides
 })
 .run(function($websocket, CONFIG){
 
