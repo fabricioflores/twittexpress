@@ -21,3 +21,6 @@ Twitter client with Express.JS and Angular.JS generated with [Generator Angular 
 `git fetch upstream`
 - Rebase your branch against patovala's branch
 `git rebase upstream/master`
+
+### Add new route to server
+- yo angular-fullstack:endpoint pbshow

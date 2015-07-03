@@ -6,5 +6,6 @@ client/bower_components
 dist
 /server/config/local.env.js
 *.sw?
+*.bk
 npm-debug.log
 server/config/environment/credentials.json

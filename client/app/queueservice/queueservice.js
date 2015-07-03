@@ -15,7 +15,7 @@ angular.module('twittexpressApp')
   function loadManifest(){
     var queue = new createjs.LoadQueue(true);
 
-    $http.get(configuration.manifestUrl + 'pbshow.json')
+    $http.get(configuration.manifestUrl)
     .success(function (result) {
       //load the splash always
       slides = [{id: 'splash', src: './images/splash.jpg', title: 'Este es el splash', subtitle: 'cool', type: 'splash'}];

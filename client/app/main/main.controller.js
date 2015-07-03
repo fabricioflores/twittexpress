@@ -13,7 +13,8 @@ angular.module('twittexpressApp')
         }
 
         function nextSlide() {
-            $scope.currentIndex = ($scope.currentIndex < $scope.slides.length - 1) ? ++$scope.currentIndex : 0;
+            $scope.currentIndex = ($scope.currentIndex < $scope.slides.length - 1) ?
+                ++$scope.currentIndex : 0;
             $timeout(nextSlide, INTERVAL);
         }
 

@@ -22,8 +22,8 @@ var app = angular.module('twittexpressApp', [
       port: '9000',
       maxTweets: 10
 })
-.constant('configuration',{ //PV configuration constants
-  'manifestUrl': '/'
+.constant('configuration',{
+  'manifestUrl': '/pbshow' // where to get slides
 })
 .run(function($websocket, CONFIG){
 
