@@ -70,16 +70,30 @@ exports.index = function(req, res) {
 
     switch (req.query.acl) {
       case 'whitelist':
-        if (saveUser(appdata.users.wList, q.user)){
+        if (req.query.action === 'add'){
+          if (saveUser(appdata.users.wList, q.user)){
+            emiter.emit('updateacl', {'list': req.query.acl, 'user': q.user,
+                         'action': req.query.action});
+          }
+        }else if(req.query.action === 'remove'){
+          if (removeUser(appdata.users.wList, q.user)){
           emiter.emit('updateacl', {'list': req.query.acl, 'user': q.user,
-                       'action': 'add'});
+                       'action': req.query.action});
+          }
         }
       break;
 
       case 'blacklist':
-        if (saveUser(appdata.users.bList, q.user)){
-            emiter.emit('updateacl', {'list': req.query.acl, 'user': q.user,
-                       'action': 'add'});
+        if (req.query.action === 'add'){
+          if (saveUser(appdata.users.bList, q.user)){
+          emiter.emit('updateacl', {'list': req.query.acl, 'user': q.user,
+                       'action': req.query.action});
+          }
+        }else if(req.query.action === 'remove'){
+          if (removeUser(appdata.users.bList, q.user)){
+          emiter.emit('updateacl', {'list': req.query.acl, 'user': q.user,
+                       'action': req.query.action});
+          }
         }
       break;
 

@@ -63,6 +63,17 @@ emiter.on('updateacl', function(act){
     if(act.action === 'add'){
       wsh.addWhiteListUser(act.user);
       console.log('acl updated');
+    }else if(act.action === 'remove'){
+      wsh.removeWhiteListUser(act.user);
+      console.log('acl updated');
+    }
+  }else if(act.list === 'blacklist'){
+    if(act.action === 'add'){
+      wsh.addBlackListUser(act.user);
+      console.log('acl updated');
+    }else if(act.action === 'remove'){
+      wsh.removeBlackListUser(act.user);
+      console.log('acl updated');
     }
   }
 });

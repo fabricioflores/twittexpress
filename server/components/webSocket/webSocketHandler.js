@@ -118,8 +118,20 @@ module.exports = function(server, wss){
     acl.wList.push(u);
   };
 
+  var removeWhiteListUser = function(u){
+    acl.wList = _.remove(acl.wList, function(n){
+      return n === u;
+    });
+  };
+
   var addBlackListUser = function(u){
     acl.bList.push(u);
+  };
+
+  var removeBlackListUser = function(u){
+    acl.bList = _.remove(acl.bList, function(n){
+      return n === u;
+    });
   };
 
   return {
@@ -130,7 +142,9 @@ module.exports = function(server, wss){
     setStream: setStream,
     forwardTweet: forwardTweet,
     addBlackListUser: addBlackListUser,
-    addWhiteListUser: addWhiteListUser
+    addWhiteListUser: addWhiteListUser,
+    removeBlackListUser: removeBlackListUser,
+    removeWhiteListUser: removeWhiteListUser
   }
 
 };
