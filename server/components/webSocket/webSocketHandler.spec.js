@@ -45,7 +45,7 @@ describe('Striped off websockethandler', function() {
     fs.readFile.restore();
     fs.exists('tweets-test.json', function(exists){
         if(exists) {
-            fs.unlinkSync('tweets-test.json');
+          fs.unlinkSync('tweets-test.json');
         }
     });
     done();
@@ -84,7 +84,7 @@ describe('Striped off websockethandler', function() {
       tweets.push(tweet);
       //console.log('TWEETS:', tweets);
       assert(spy.calledWith('tweets-test.json', JSON.stringify(tweets)),
-             'the fs.writeFile function was called incorrectly');
+        'the fs.writeFile function was called incorrectly');
       fs.writeFile.restore();
       done();
   });

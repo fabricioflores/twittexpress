@@ -38,12 +38,12 @@ module.exports = function(server, wss){
       if (isAuthorized(tweet)){
           tweets.push(tweet);
           fs.writeFile(config.tweetlog || './tweets-log.json',
-                       JSON.stringify(tweets), function(err) {
-                           if( err ){
-                               console.log( err );
-                           }
-                       });
-                       wss.send(tweet, {mask: true});
+                      JSON.stringify(tweets), function(err) {
+                        if( err ){
+                          console.log( err );
+                        }
+                      });
+                      wss.send(tweet, {mask: true});
       }else{
           console.log('DEBUG: no autorizado', tweet);
       }
@@ -103,7 +103,7 @@ module.exports = function(server, wss){
 
       var tldate = new Date(i.timestamp);
       return _.isEqual([tldate.getDate(), tldate.getFullYear(), tldate.getMonth()],
-                       [today.getDate(), today.getFullYear(), today.getMonth()]);
+                        [today.getDate(), today.getFullYear(), today.getMonth()]);
     });
 
     return JSON.stringify(tls);

@@ -73,12 +73,12 @@ exports.index = function(req, res) {
         if (req.query.action === 'add'){
           if (saveUser(appdata.users.wList, q.user)){
             emiter.emit('updateacl', {'list': req.query.acl, 'user': q.user,
-                         'action': req.query.action});
+                        'action': req.query.action});
           }
         }else if(req.query.action === 'remove'){
           if (removeUser(appdata.users.wList, q.user)){
           emiter.emit('updateacl', {'list': req.query.acl, 'user': q.user,
-                       'action': req.query.action});
+                      'action': req.query.action});
           }
         }
       break;
@@ -87,12 +87,12 @@ exports.index = function(req, res) {
         if (req.query.action === 'add'){
           if (saveUser(appdata.users.bList, q.user)){
           emiter.emit('updateacl', {'list': req.query.acl, 'user': q.user,
-                       'action': req.query.action});
+                      'action': req.query.action});
           }
         }else if(req.query.action === 'remove'){
           if (removeUser(appdata.users.bList, q.user)){
           emiter.emit('updateacl', {'list': req.query.acl, 'user': q.user,
-                       'action': req.query.action});
+                      'action': req.query.action});
           }
         }
       break;
@@ -108,4 +108,3 @@ exports.index = function(req, res) {
     }
   }
 };
-
