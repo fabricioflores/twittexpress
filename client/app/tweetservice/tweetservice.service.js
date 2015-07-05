@@ -20,7 +20,7 @@ angular.module('twittexpressApp')
 
     function removeAll () {
       tls = [];
-       return tls;
+      return tls;
     }
 
     function getTweets() {

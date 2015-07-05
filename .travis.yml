@@ -11,6 +11,7 @@ script:
 - grunt test:client
 - grunt test:server
 - grunt jshint
+- grunt lintspaces
 - "./node_modules/.bin/karma start --single-run --browsers PhantomJS karma.conf.js"
 services: mongodb
 notifications:

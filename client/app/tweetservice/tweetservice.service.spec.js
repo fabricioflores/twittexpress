@@ -26,7 +26,6 @@ describe('Service: tweetservice', function () {
    * deberia agregar un tweet
    * */
   it('should add tweets', function() {
-
     var tweet = {message: 'This is an empty tweet'};
     tweetservice.add(tweet);
     expect(tweetservice.getTweets().length).toBe(1);
@@ -42,41 +41,40 @@ describe('Service: tweetservice', function () {
     tweetservice.add(tweet1);
     expect(tweetservice.pop()).toEqual(tweet1);
 
- });
-/*
+  });
+
+  /*
   * deberia sacar el primer tweet de
   * la lista
   * */
- it('should get first tweet', function() {
-   var tweet1 = {
-     id: 250075927172759561,
-     text:'text new tweet 1'
-   };
-   var tweet2 = {
-     id: 250075927172759562,
-     text:'text new tweet 2'
-   };
-   var tweet3 = {
-     id: 250075927172759563,
-     text:'text new tweet 3'
-   };
+  it('should get first tweet', function() {
+    var tweet1 = {
+      id: 250075927172759561,
+      text:'text new tweet 1'
+    };
+    var tweet2 = {
+      id: 250075927172759562,
+      text:'text new tweet 2'
+    };
+    var tweet3 = {
+      id: 250075927172759563,
+      text:'text new tweet 3'
+    };
 
-   tweetservice.add(tweet1);
-   tweetservice.add(tweet2);
-   tweetservice.add(tweet3);
+    tweetservice.add(tweet1);
+    tweetservice.add(tweet2);
+    tweetservice.add(tweet3);
 
-   expect(tweetservice.first()).toEqual(tweet1);
-   expect(tweetservice.getTweets().length).toBe(2);
- });
+    expect(tweetservice.first()).toEqual(tweet1);
+    expect(tweetservice.getTweets().length).toBe(2);
+  });
 
   /*
   * deberia retornar lista vacia de tweets luego de usar la funcion de borrarlos todos
   * */
- it('should return a empty list of tweets', function() {
-   //testing with empty
-   var tweets = tweetservice.removeAll();
-   expect(tweets.length).toBe(0);
-
- });
+  it('should return a empty list of tweets', function() {
+    //testing with empty
+    var tweets = tweetservice.removeAll();
+    expect(tweets.length).toBe(0);
+  });
 });
-
