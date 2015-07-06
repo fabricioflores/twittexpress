@@ -158,7 +158,11 @@ module.exports = function (grunt) {
       // },
       javascript: {
         src: [
-            'client/app/**/*.js'
+          // client side
+            'client/app/**/*.js',
+            'client/components/**/*.js',
+          // server side
+            'server/**/*.js',
         ],
         options: {
             newline: true,
