@@ -6,7 +6,7 @@
 'use strict';
 
 angular.module('twittexpressApp')
-.service('tweetservice', function () {
+.service('tweetservice', ['$rootScope', function ($rootScope) {
 
     var tls = [];
 
@@ -31,11 +31,30 @@ angular.module('twittexpressApp')
       return tls.shift();
     }
 
+    /*
+    * TODO: here we need to first, let the front end know we have a new tweet
+    *       then queue the tweet into the slide list, check if the tweet has
+    *       more info (picture) and add it to the slide
+    * */
+
+    function processTweet(tweet){
+        // un tweet debe tener:
+        // user, text, id...
+        //TODO: el plan es si el tweet tiene una imagen se debe llamar al queueservice
+        if (tweet.id && tweet.text && tweet.user){
+            $rootScope.$broadcast('new_tweet', tweet);
+            return true;
+        }else{
+            return false;
+        }
+    }
+
     return {
         add: add,
         pop: pop,
         first: first,
         removeAll: removeAll,
-        getTweets: getTweets
+        getTweets: getTweets,
+        processTweet: processTweet
     };
-});
+}]);
