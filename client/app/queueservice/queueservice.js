@@ -44,4 +44,3 @@ angular.module('twittexpressApp')
     slides: function(){return slides;}
   };
 }]);
-

@@ -64,5 +64,3 @@ app.animation('.slide-animation', function ($window) {
     }
   };
 });
-
-

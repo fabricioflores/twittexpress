@@ -8,20 +8,20 @@ describe('Controller: MainCtrl', function () {
   var MainCtrl, scope, $controller, $timeout;
 
   var QueueServiceMock = {
-     loadManifest: function(){},
-     slides: function(){
-         return [
-           {id: 'image00', src: './images/image00.jpg', title: 'Our love',
-               subtitle: 'will prove everyone wrong!'},
-           {id: 'image01', src: './images/image01.jpg', title: 'Can you feel',
-               subtitle: 'the love tonight!'},
-           {id: 'image02', src: './images/image02.jpg', title: 'You are the wind',
-               subtitle: 'beneath my wings'},
-           {id: 'image03', src: './images/image03.jpg', title: 'Anything for you',
-               subtitle: 'even accepting your family'},
-           {id: 'image04', src: './images/image04.jpg', title: 'True love',
-               subtitle: 'a dream within a dream'}];
-     }
+    loadManifest: function(){},
+    slides: function(){
+      return [
+        {id: 'image00', src: './images/image00.jpg', title: 'Our love',
+          subtitle: 'will prove everyone wrong!'},
+        {id: 'image01', src: './images/image01.jpg', title: 'Can you feel',
+          subtitle: 'the love tonight!'},
+        {id: 'image02', src: './images/image02.jpg', title: 'You are the wind',
+          subtitle: 'beneath my wings'},
+        {id: 'image03', src: './images/image03.jpg', title: 'Anything for you',
+          subtitle: 'even accepting your family'},
+        {id: 'image04', src: './images/image04.jpg', title: 'True love',
+          subtitle: 'a dream within a dream'}];
+    }
   };
 
   // Initialize the controller and a mock scope
