@@ -12,10 +12,13 @@ module.exports = function(server, wss){
 
   var tweets = [],
       stream,
-      acl = {wList: [], bList: []};
+      ws,
+      acl = require('../../config/environment/' + config.appdata).users
+              || {wList: [], bList: []};
 
   var connect = function(callback){
-    wss.on('connection', function (ws) {
+    wss.on('connection', function (_ws_) {
+      ws = _ws_;
       callback(ws);
     });
   };
@@ -43,7 +46,7 @@ module.exports = function(server, wss){
                           console.log( err );
                         }
                       });
-                      wss.send(tweet, {mask: true});
+                      ws.send(tweet, {mask: true});
       }else{
           console.log('DEBUG: no autorizado', tweet);
       }
@@ -54,7 +57,7 @@ module.exports = function(server, wss){
     var tweetlog = config.tweetlog || './tweets-log.json';
     stream = _stream_;
 
-    connect(function(){
+    connect(function(ws){
         loadTweets(tweetlog, function(_tweets_){
             tweets = _tweets_;
 
@@ -65,7 +68,7 @@ module.exports = function(server, wss){
             wss.on('message', function incoming(message) {
                 console.log('mensaje recibido websocket abierto: %s', message);
                 if(message === 'get_tweets'){
-                  wss.send(getTweets());
+                  ws.send(getTweets());
                 }
             });
         });
@@ -82,13 +85,13 @@ module.exports = function(server, wss){
       }
 
       if (_.contains(acl.bList, '*')){
-          return false;
+        return false;
       }else if(_.contains(acl.bList, uName)){
-          return false;
+        return false;
       }else if(_.contains(acl.wList, '*')){
-          return true;
+        return true;
       }else{
-          return _.contains(acl.wList, uName);
+        return _.contains(acl.wList, uName);
       }
   };
 
@@ -134,6 +137,10 @@ module.exports = function(server, wss){
     });
   };
 
+  var resetAcl = function(){
+    acl = {wList: [], bList: []};
+  };
+
   return {
     init: init,
     getConfig: function(){
@@ -144,7 +151,8 @@ module.exports = function(server, wss){
     addBlackListUser: addBlackListUser,
     addWhiteListUser: addWhiteListUser,
     removeBlackListUser: removeBlackListUser,
-    removeWhiteListUser: removeWhiteListUser
+    removeWhiteListUser: removeWhiteListUser,
+    resetAcl: resetAcl,
   }
 
 };

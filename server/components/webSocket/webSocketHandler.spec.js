@@ -8,12 +8,9 @@ var expect = chai.expect;
 var assert = chai.assert;
 var websocketHandler = require('./webSocketHandler');
 var fs = require('fs');
-//var Twit = require('twit');
-//var T = new Twit(config);
-
 
 describe('Striped off websockethandler', function() {
-  var tweets, tweet, stream, wshs, mockwss;
+  var tweets, tweet, stream, wshs, mockwss, mockws;
 
   beforeEach(function(done){
     //var websocketHandler = require('./webSocketHandler')(server);
@@ -25,17 +22,24 @@ describe('Striped off websockethandler', function() {
     config.query = '#copaAmerica';
     config.tweetlog = 'tweets-test.json';
 
-    //stream = T.stream('statuses/filter', {
-    //    track: config.query || '@patovala'
-    //});
-    stream = {on: function(msg, cb){cb(tweet);}};
+    stream = {on: function(msg, cb){}};
 
-    mockwss = {on: function(m, cb){cb('get_tweets');}, send: function(){}};
-    //sinon.mock(mockwss);
+    mockws = {send: function(){}};
+    mockwss = {on: function(m, cb){
+      if(m === 'connection'){
+        cb(mockws);
+      }else if(m === 'message'){
+        //mock on('message')
+        cb('get_tweets');
+      }
+    }};
     sinon.stub(fs, 'exists').yields(true);
     sinon.stub(fs, 'readFile').yields(null, JSON.stringify(tweets));
-    //sinon.stub(mockwss, 'on').yields(JSON.stringify(tweet));
     wshs = websocketHandler({server: 9000}, mockwss);
+
+    wshs.resetAcl();
+
+    // erase the acl for testing
     done();
 
   });
@@ -101,7 +105,7 @@ describe('Striped off websockethandler', function() {
    * que sean los de este dia*/
   it('get the list of collected tweets from the server', function(done) {
       var tweet_list;
-      var spy = sinon.spy(mockwss, 'send');
+      var spy = sinon.spy(mockws, 'send');
       wshs.addWhiteListUser('patovala');
       wshs.init(stream);
       sinon.stub(mockwss, 'on').yields('get_tweets');
@@ -110,7 +114,7 @@ describe('Striped off websockethandler', function() {
       expect(fs.readFile).to.have.been.called;
 
       //expect(tweet_list.length).to.equal(2);
-      assert(spy.calledWith(JSON.stringify(tweets.slice(0,2))), 'Not expected tweets');
+      assert(spy.calledWith(JSON.stringify(tweets.slice(0,2))), 'bad call to send');
       done();
 
   });
@@ -122,7 +126,7 @@ describe('Striped off websockethandler', function() {
     var acl = {wList: ['patovala','ingemurdok','darwingualito'], bList: ['ingemurdok']};
 
     var whitetweet = {'message': 'ok', 'user': {'screen_name': 'patovala'}};
-    var spy = sinon.spy(mockwss, 'send');
+    var spy = sinon.spy(mockws, 'send');
 
     wshs.addWhiteListUser('patovala');
     sinon.stub(stream, 'on').yields(whitetweet);
@@ -138,7 +142,7 @@ describe('Striped off websockethandler', function() {
     var acl = {wList: ['patovala','ingemurdok','darwingualito'], bList: ['ingemurdok']};
 
     var whitetweet = {'message': 'ok', 'user': {'screen_name': 'patovala'}};
-    var spy = sinon.spy(mockwss, 'send');
+    var spy = sinon.spy(mockws, 'send');
 
     wshs.addBlackListUser('*');
     wshs.addBlackListUser('ingemurdok');
@@ -153,7 +157,7 @@ describe('Striped off websockethandler', function() {
     var acl = {wList: ['patovala','ingemurdok','darwingualito'], bList: ['ingemurdok']};
 
     var whitetweet = {'message': 'ok', 'user': {'screen_name': 'algo'}};
-    var spy = sinon.spy(mockwss, 'send');
+    var spy = sinon.spy(mockws, 'send');
 
     wshs.addWhiteListUser('patovala');
     wshs.addWhiteListUser('*');
@@ -168,7 +172,7 @@ describe('Striped off websockethandler', function() {
   it('Deny all tweets by * user in blackList', function() {
 
     var whitetweet = {'message': 'ok', 'user': {'screen_name': 'patovala'}};
-    var spy = sinon.spy(mockwss, 'send');
+    var spy = sinon.spy(mockws, 'send');
 
     wshs.addWhiteListUser('patovala');
     wshs.addBlackListUser('*');
@@ -182,7 +186,7 @@ describe('Striped off websockethandler', function() {
   it('Deny a user tweet if user is in white and blackList at same time', function() {
 
     var whitetweet = {'message': 'ok', 'user': {'screen_name': 'patovala'}};
-    var spy = sinon.spy(mockwss, 'send');
+    var spy = sinon.spy(mockws, 'send');
 
     wshs.addWhiteListUser('patovala');
     wshs.addBlackListUser('patovala');
@@ -193,10 +197,10 @@ describe('Striped off websockethandler', function() {
 
   });
 
-  it('Allow a user tweet only if user is in whiteList', function() {
+  it('Allow an user tweet only if user is in whiteList', function() {
 
     var whitetweet = {'message': 'ok', 'user': {'screen_name': 'user123'}};
-    var spy = sinon.spy(mockwss, 'send');
+    var spy = sinon.spy(mockws, 'send');
 
     wshs.addWhiteListUser('user123');
     sinon.stub(stream, 'on').yields(whitetweet);

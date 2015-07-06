@@ -54,20 +54,22 @@ exports.index = function(req, res) {
 
   var updateQuery = function(query) {
     appdata.query = query;
-          fs.writeFile('./server/config/environment/' + config.appdata, JSON.stringify(appdata), function(err){
-              if(err){
-                  console.log('error saving query into appdata ', err);
-              }
-              // restart the twitter service to change the query
-              emiter.emit('reloadtweeter', appdata);
-              resp = {resp: 'query updated'};
-              res.json(resp);
-          });
+    fs.writeFile('./server/config/environment/' + config.appdata, JSON.stringify(appdata), function(err){
+      if(err){
+        console.log('error saving query into appdata ', err);
+      }
+      // restart the twitter service to change the query
+      emiter.emit('reloadtweeter', appdata);
+      resp = {resp: 'query updated'};
+      res.json(resp);
+    });
   }
 
   if (req.method === 'POST') {
     var q = req.body;
 
+    //HOTWO test in curl:
+    //curl -X POST -d '{"user":"panchovilla"}' localhost:9000/api/configs?acl=whitelist --header "Content-Type:application/json"
     switch (req.query.acl) {
       case 'whitelist':
         if (req.query.action === 'add'){
@@ -108,3 +110,18 @@ exports.index = function(req, res) {
     }
   }
 };
+
+exports.test = function(req, res) {
+  var emiter = require('../../app').emiter;
+  var tweet = {
+    message: 'this is a tweet',
+    user: {
+      screen_name: 'someone'
+    }
+  };
+
+  emiter.emit('testtweet', tweet);
+  var resp = {resp: 'ok'};
+  res.json(resp);
+};
+
