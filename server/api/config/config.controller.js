@@ -68,6 +68,8 @@ exports.index = function(req, res) {
   if (req.method === 'POST') {
     var q = req.body;
 
+    //HOTWO test in curl:
+    //curl -X POST -d '{"user":"panchovilla"}' localhost:9000/api/configs?acl=whitelist --header "Content-Type:application/json"
     switch (req.query.acl) {
       case 'whitelist':
         if (req.query.action === 'add'){
@@ -108,3 +110,18 @@ exports.index = function(req, res) {
     }
   }
 };
+
+exports.test = function(req, res) {
+  var emiter = require('../../app').emiter;
+  var tweet = {
+    message: 'this is a tweet',
+    user: {
+      screen_name: 'someone'
+    }
+  };
+
+  emiter.emit('testtweet', tweet);
+  var resp = {resp: 'ok'};
+  res.json(resp);
+};
+

@@ -13,17 +13,17 @@ angular.module('twittexpressApp')
         }
 
         function nextSlide() {
-            $scope.currentIndex = ($scope.currentIndex < $scope.slides.length - 1) ?
-                ++$scope.currentIndex : 0;
-            $timeout(nextSlide, INTERVAL);
+          $scope.currentIndex = ($scope.currentIndex < $scope.slides.length - 1) ?
+            ++$scope.currentIndex : 0;
+          $timeout(nextSlide, INTERVAL);
         }
 
         function setCurrentAnimation(animation) {
-            $scope.currentAnimation = animation;
+          $scope.currentAnimation = animation;
         }
 
         function isCurrentAnimation(animation) {
-            return $scope.currentAnimation === animation;
+          return $scope.currentAnimation === animation;
         }
 
         function loadSlides() {

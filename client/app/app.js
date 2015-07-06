@@ -39,6 +39,7 @@ var app = angular.module('twittexpressApp', [
   });
 
   ws.$on('$message', function(message) {
+    // tenemos un nuevo tweet
     console.log(message);
   });
 

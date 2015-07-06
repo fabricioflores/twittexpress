@@ -78,6 +78,10 @@ emiter.on('updateacl', function(act){
   }
 });
 
+emiter.on('testtweet', function(tweet){
+  wsh.forwardTweet(tweet);
+});
+
 // Expose app
 exports = module.exports = app;
 module.exports.emiter = emiter;

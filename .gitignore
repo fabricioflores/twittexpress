@@ -8,3 +8,4 @@ dist
 *.bk
 npm-debug.log
 server/config/environment/credentials.json
+server/config/environment/appdata.json
