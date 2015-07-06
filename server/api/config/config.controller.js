@@ -124,4 +124,3 @@ exports.test = function(req, res) {
   var resp = {resp: 'ok'};
   res.json(resp);
 };
-

@@ -41,6 +41,8 @@ var app = angular.module('twittexpressApp', [
   ws.$on('$message', function(message) {
     // tenemos un nuevo tweet
     console.log(message);
+    //TODO: hay un nuevo ftweet crear un discriminador que nos permita determinar si esto
+    //      es un tweet, luego procesarlo desde el QueueService
   });
 
 });

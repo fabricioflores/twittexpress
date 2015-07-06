@@ -132,13 +132,14 @@ describe('Striped off websockethandler', function() {
     sinon.stub(stream, 'on').yields(whitetweet);
     wshs.init(stream);
 
-    assert(spy.calledWith(whitetweet), 'not expected tweet');
+    assert(spy.calledWith(JSON.stringify(whitetweet)), 'not expected tweet');
 
   });
+
   /*
    * Test the blacklist, [*,algo]
    * */
-    it('should denied allTweets if anyone and * user, are  in blacklist', function() {
+  it('should denied allTweets if anyone and * user, are  in blacklist', function() {
     var acl = {wList: ['patovala','ingemurdok','darwingualito'], bList: ['ingemurdok']};
 
     var whitetweet = {'message': 'ok', 'user': {'screen_name': 'patovala'}};
@@ -149,7 +150,7 @@ describe('Striped off websockethandler', function() {
     sinon.stub(stream, 'on').yields(whitetweet);
     wshs.init(stream);
 
-    assert(spy.neverCalledWith(whitetweet), 'not expected tweet');
+    assert(spy.neverCalledWith(JSON.stringify(whitetweet)), 'not expected tweet');
 
   });
 
@@ -206,7 +207,7 @@ describe('Striped off websockethandler', function() {
     sinon.stub(stream, 'on').yields(whitetweet);
     wshs.init(stream);
 
-    assert(spy.calledWith(whitetweet), 'not expected tweet');
+    assert(spy.calledWith(JSON.stringify(whitetweet)), 'not expected tweet');
 
   });
 
