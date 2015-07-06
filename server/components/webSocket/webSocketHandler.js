@@ -91,9 +91,6 @@ module.exports = function(server, wss){
       }else if(_.contains(acl.wList, '*')){
         return true;
       }else{
-        //console.log('DEBUG ', tweet, uName);
-        console.log('DEBUG ', acl);
-        //console.log('DEBUG ', _.contains(acl.wList, uName));
         return _.contains(acl.wList, uName);
       }
   };
@@ -121,7 +118,6 @@ module.exports = function(server, wss){
   };
 
   var addWhiteListUser = function(u){
-    console.log('DEBUG acl:', acl);
     acl.wList.push(u);
   };
 

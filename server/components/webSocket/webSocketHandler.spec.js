@@ -114,7 +114,6 @@ describe('Striped off websockethandler', function() {
       expect(fs.readFile).to.have.been.called;
 
       //expect(tweet_list.length).to.equal(2);
-      console.log('tweets ', JSON.stringify(tweets.slice(0,2)));
       assert(spy.calledWith(JSON.stringify(tweets.slice(0,2))), 'bad call to send');
       done();
 
