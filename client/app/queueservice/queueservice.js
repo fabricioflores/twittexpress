@@ -39,6 +39,15 @@ angular.module('twittexpressApp')
     });
   }
 
+  /*
+   * TODO: here we need to first, let the front end know we have a new tweet
+   *       then queue the tweet into the slide list, check if the tweet has
+   *       more info (picture) and add it to the slide
+   * */
+  function processTweet(tweet){
+
+  }
+
   return {
     loadManifest: loadManifest,
     slides: function(){return slides;}

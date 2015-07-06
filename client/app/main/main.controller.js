@@ -4,6 +4,9 @@ angular.module('twittexpressApp')
     .controller('MainCtrl', function ($scope, $timeout, QueueService) {
         var INTERVAL = 10000;
 
+        //TODO: pedir el config al server cuando se levanta para poder poner cosas como
+        //      el INTERVAL
+
         function setCurrentSlideIndex(index) {
             $scope.currentIndex = index;
         }
