@@ -13,8 +13,8 @@ module.exports = function(server, wss){
   var tweets = [],
       stream,
       ws,
-      acl = require('../../config/environment/' + config.appdata).users
-              || {wList: [], bList: []};
+      acl = require('../../config/environment/' + config.appdata).users ||
+              {wList: [], bList: []};
 
   var connect = function(callback){
     wss.on('connection', function (_ws_) {
@@ -46,7 +46,8 @@ module.exports = function(server, wss){
                           console.log( err );
                         }
                       });
-                      ws.send(tweet, {mask: true});
+                      //ws.send(JSON.stringify(tweet), {mask: true});
+                      ws.send(JSON.stringify(tweet));
       }else{
           console.log('DEBUG: no autorizado', tweet);
       }
