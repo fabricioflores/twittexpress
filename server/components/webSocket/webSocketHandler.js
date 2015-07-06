@@ -13,7 +13,7 @@ module.exports = function(server, wss){
   var tweets = [],
       stream,
       ws,
-      acl = require('../../config/environment/appdata.json').users
+      acl = require('../../config/environment/' + config.appdata).users
               || {wList: [], bList: []};
 
   var connect = function(callback){
