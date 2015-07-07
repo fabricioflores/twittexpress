@@ -45,7 +45,6 @@ angular.module('twittexpressApp')
    *       more info (picture) and add it to the slide
    * */
   function processTweet(tweet){
-    
   }
 
   return {

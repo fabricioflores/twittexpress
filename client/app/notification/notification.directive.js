@@ -6,9 +6,9 @@ angular.module('twittexpressApp')
       templateUrl: 'app/notification/notification.html',
       restrict: 'EA',
       link: function (scope, element, attrs) {
-      	scope.$on('new_tweet', function(event, tweet){
+        scope.$on('new_tweet', function(event, tweet){
           console.log('presentar tweet');
-      	});
+        });
       }
     };
   });

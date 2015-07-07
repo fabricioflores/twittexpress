@@ -28,5 +28,4 @@ describe('Directive: notification', function () {
     expect(scope.$on).toHaveBeenCalled();
     //expect(element.text()).toBe('this is the notification directive');
   }));
-
 });
