@@ -54,6 +54,4 @@ describe('Directive: notification', function () {
     $timeout.flush();
     expect(scope.msg).toBeNull();
   }));
-
-
 });
