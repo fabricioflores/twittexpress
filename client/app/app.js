@@ -21,12 +21,13 @@ var app = angular.module('twittexpressApp', [
 .constant('CONFIG', {
       host: 'localhost',
       port: '9000',
+      time: 10*1000,
       maxTweets: 10
 })
 .constant('configuration',{
   'manifestUrl': '/api/pbshow' // where to get slides
 })
-.run(function($websocket, CONFIG){
+.run(function($websocket, CONFIG, tweetservice){
 
   var ws;
 
@@ -41,6 +42,7 @@ var app = angular.module('twittexpressApp', [
   ws.$on('$message', function(message) {
     // tenemos un nuevo tweet
     console.log(message);
+    tweetservice.processTweet(JSON.parse(message));
     //TODO: hay un nuevo ftweet crear un discriminador que nos permita determinar si esto
     //      es un tweet, luego procesarlo desde el QueueService
   });

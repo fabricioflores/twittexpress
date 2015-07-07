@@ -44,8 +44,10 @@ angular.module('twittexpressApp')
         if (tweet.id && tweet.text && tweet.user){
             $rootScope.$broadcast('new_tweet', tweet);
             add(tweet);
+            console.log('llego aqui');
             return true;
         }else{
+            console.log('mmmmm');
             return false;
         }
     }
