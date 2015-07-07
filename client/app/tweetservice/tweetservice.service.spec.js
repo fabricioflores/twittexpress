@@ -83,7 +83,7 @@ describe('Service: tweetservice', function () {
  /*
   * deberia hacer un broadcast si hay un nuevo tweet
   * */
-  iit('should return a empty list of tweets', function() {
+  it('should return a empty list of tweets', function() {
     var tweet = {
       id: 250075927172759563,
       text:'text new tweet 3',
