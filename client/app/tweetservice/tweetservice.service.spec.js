@@ -80,7 +80,7 @@ describe('Service: tweetservice', function () {
     expect(tweets.length).toBe(0);
   });
 
- /*
+  /*
   * deberia hacer un broadcast si hay un nuevo tweet
   * */
   it('should return a empty list of tweets', function() {
@@ -88,7 +88,7 @@ describe('Service: tweetservice', function () {
       id: 250075927172759563,
       text:'text new tweet 3',
       user: {screen_name: 'jorgito'}
-    }; 
+    };
 
     spyOn($rootScope, '$broadcast').andCallThrough();
     tweetservice.processTweet(tweet);
@@ -105,7 +105,7 @@ describe('Service: tweetservice', function () {
                   {text: 'amo barcelona', user: {screen_name: 'jorgito'}},
                   {id: 250075927172759563, text: 'hola q hace'},
                   {id: 213123124123123414}
-                ]; 
+                ];
 
 
     spyOn($rootScope, '$broadcast').andCallThrough();
