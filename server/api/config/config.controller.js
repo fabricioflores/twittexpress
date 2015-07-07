@@ -20,8 +20,8 @@ exports.index = function(req, res) {
         }
         resp = {resp: 'user added'};
         res.json(resp);
-        return true;
       });
+      return true;
     }else{
       //user already in the acl
       resp = {resp: 'user already in acl'};

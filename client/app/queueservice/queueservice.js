@@ -45,11 +45,12 @@ angular.module('twittexpressApp')
    *       more info (picture) and add it to the slide
    * */
   function processTweet(tweet){
-
+    
   }
 
   return {
     loadManifest: loadManifest,
-    slides: function(){return slides;}
+    slides: function(){return slides;},
+    processTweet: processTweet
   };
 }]);

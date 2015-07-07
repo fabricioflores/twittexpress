@@ -4,6 +4,7 @@ var should = require('should');
 var app = require('../../app');
 var request = require('supertest');
 var fs = require('fs');
+var sinon = require("sinon");
 
 describe('GET /api/configs', function() {
 
@@ -83,6 +84,8 @@ describe('POST /api/configs', function() {
    *       checking if addWhiteListUser works
    **/
   it('should accept new users in whitelist', function(done) {
+    var spy = sinon.spy();
+    app.emiter.on('updateacl', spy);
     request(app)
       .post('/api/configs?acl=whitelist&action=add')
       .set('Content-Type', 'application/json')
@@ -94,6 +97,7 @@ describe('POST /api/configs', function() {
             console.log('error in /api/configs?acl=whitelist ', err);
         }
         res.body.resp.should.equal('user added');
+        sinon.assert.calledWith(spy, {'list': 'whitelist', 'user': 'pppp', 'action': 'add'});
         done();
       });
   });
@@ -102,6 +106,8 @@ describe('POST /api/configs', function() {
    *       checking if addBlackListUser works
    **/
   it('should accept new users in blacklist', function(done) {
+    var spy = sinon.spy();
+    app.emiter.on('updateacl', spy);
     request(app)
       .post('/api/configs?acl=blacklist&action=add')
       .set('Content-Type', 'application/json')
@@ -113,6 +119,7 @@ describe('POST /api/configs', function() {
             console.log('error in /api/configs?acl=blacklist ', err);
         }
         res.body.resp.should.equal('user added');
+        sinon.assert.calledWith(spy, {'list': 'blacklist', 'user': 'newuser', 'action': 'add'});
         done();
       });
   });
@@ -144,6 +151,8 @@ describe('POST /api/configs', function() {
    **/
 
   it('should remove a user if exists in whitelist', function(done) {
+    var spy = sinon.spy();
+    app.emiter.on('updateacl', spy);
     request(app)
       .post('/api/configs?acl=whitelist&action=remove')
       .set('Content-Type', 'application/json')
@@ -155,6 +164,7 @@ describe('POST /api/configs', function() {
             console.log('error in /api/configs?acl=whitelist ', err);
         }
         res.body.resp.should.equal('user removed');
+        sinon.assert.calledWith(spy, {'list': 'whitelist', 'user': 'lmejia', 'action': 'remove'});
         done();
       });
   });
@@ -184,6 +194,8 @@ describe('POST /api/configs', function() {
    *       checking if removeBlackListUser works
    **/
   it('should remove a user if exist in blacklist', function(done) {
+    var spy = sinon.spy();
+    app.emiter.on('updateacl', spy);
     request(app)
       .post('/api/configs?acl=blacklist&action=remove')
       .set('Content-Type', 'application/json')
@@ -195,6 +207,7 @@ describe('POST /api/configs', function() {
             console.log('error in /api/configs?acl=blacklist ', err);
         }
         res.body.resp.should.equal('user removed');
+        sinon.assert.calledWith(spy, {'list': 'blacklist', 'user': 'ingemurdok', 'action': 'remove'});
         done();
       });
   });
