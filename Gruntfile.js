@@ -545,6 +545,12 @@ module.exports = function (grunt) {
     this.async();
   });
 
+  grunt.registerTask('appData', 'Copy appData if not exist', function() {
+    if (!grunt.file.exists('./server/config/environment/appdata.json')) {
+      grunt.file.copy('./server/config/environment/appdata.json.template','./server/config/environment/appdata.json');
+    }
+  });
+
   grunt.registerTask('serve', function (target) {
     if (target === 'dist') {
       return grunt.task.run(['build', 'env:all', 'env:prod', 'express:prod', 'wait', 'open', 'express-keepalive']);
@@ -564,6 +570,7 @@ module.exports = function (grunt) {
 
     grunt.task.run([
       'clean:server',
+      'appData',
       'env:all',
       'concurrent:server',
       'injector',

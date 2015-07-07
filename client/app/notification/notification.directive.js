@@ -1,14 +1,18 @@
 'use strict';
 
 angular.module('twittexpressApp')
-  .directive('notification', function () {
+  .directive('notification',['$timeout', 'CONFIG', function ($timeout, CONFIG) {
     return {
       templateUrl: 'app/notification/notification.html',
       restrict: 'EA',
-      link: function (scope) {
-        scope.$on('new_tweet', function(){
-          console.log('presentar tweet');
+      controller: function ($scope) {
+        $scope.$on('new_tweet', function(event, msg){
+          $scope.msg = msg;
+          console.log('aqui tambien llego');
+          $timeout(function (){
+            $scope.msg = null;
+          },CONFIG.time);
         });
       }
     };
-  });
+  }]);

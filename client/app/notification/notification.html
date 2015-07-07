@@ -1,1 +1,7 @@
-<div>this is the notification directive</div>
+<div id="notification" ng-show="msg">
+  <div class="row">
+    <div class="col-sm-6">{{msg.id}} hola</div>
+    <div class="col-sm-6">{{msg.query}}</div>
+  </div>
+  <div class="col-sm-12">{{msg.text}}</div>
+</div>
