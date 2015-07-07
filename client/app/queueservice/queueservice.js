@@ -44,7 +44,7 @@ angular.module('twittexpressApp')
    *       then queue the tweet into the slide list, check if the tweet has
    *       more info (picture) and add it to the slide
    * */
-  function processTweet(tweet){
+  function processTweet(){
   }
 
   return {
