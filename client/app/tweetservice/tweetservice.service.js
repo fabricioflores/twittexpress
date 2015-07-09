@@ -37,18 +37,13 @@ angular.module('twittexpressApp')
     *       more info (picture) and add it to the slide
     * */
 
-    function processTweet(tweet){
+    function processTweet(tweet) {
         // un tweet debe tener:
         // user, text, id...
         //TODO: el plan es si el tweet tiene una imagen se debe llamar al queueservice
-        if (tweet.id && tweet.text && tweet.user){
+        if (tweet.id && tweet.text && tweet.user) {
             $rootScope.$broadcast('new_tweet', tweet);
             add(tweet);
-            console.log('llego aqui');
-            return true;
-        }else{
-            console.log('mmmmm');
-            return false;
         }
     }
 
