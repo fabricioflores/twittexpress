@@ -1,7 +1,6 @@
 'use strict';
-
 angular.module('twittexpressApp')
-    .controller('MainCtrl', function ($scope, $timeout, QueueService) {
+    .controller('MainCtrl', function ($scope, $timeout, QueueService, CONFIG) {
         var INTERVAL = 10000;
 
         //TODO: pedir el config al server cuando se levanta para poder poner cosas como
@@ -48,6 +47,18 @@ angular.module('twittexpressApp')
             });
         });
 
+        $scope.$on('newMessage', function (event, msg) {
+
+            swal({ // jshint ignore:line
+                title: msg.user.name + ' <small>@'+ msg.user.screen_name + '</small>',
+                text: msg.text,
+                imageUrl: msg.user.profile_image_url_https,
+                timer: CONFIG.time,
+                showConfirmButton: false,
+                html: true
+          });
+
+        });
         $scope.progress = 0;
         $scope.loaded = false;
         $scope.currentIndex = 0;

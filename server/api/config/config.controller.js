@@ -115,9 +115,11 @@ exports.test = function(req, res) {
   var emiter = require('../../app').emiter;
   var tweet = {
     id: 123456,
-    text: 'this is a tweet',
+    text: '#Loja| En este momento rueda de prensa para detallar Radio Maratón para recaudar fondos en  beneficio de #LigadeLoja.',
     user: {
-      screen_name: 'someone'
+      name: 'Janina Tatiana',
+      screen_name: 'someone',
+      profile_image_url_https: 'https://pbs.twimg.com/profile_images/469499134789963776/9mGZUjw6_normal.jpeg'
     }
   };
 

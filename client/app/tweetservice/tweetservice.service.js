@@ -42,7 +42,7 @@ angular.module('twittexpressApp')
         // user, text, id...
         //TODO: el plan es si el tweet tiene una imagen se debe llamar al queueservice
         if (tweet.id && tweet.text && tweet.user) {
-            $rootScope.$broadcast('new_tweet', tweet);
+            $rootScope.$broadcast('newMessage', tweet);
             add(tweet);
         }
     }

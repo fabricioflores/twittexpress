@@ -93,7 +93,7 @@ describe('Service: tweetservice', function () {
 
     spyOn($rootScope, '$broadcast').andCallThrough();
     tweetservice.processTweet(tweet);
-    expect($rootScope.$broadcast).toHaveBeenCalledWith('new_tweet', tweet);
+    expect($rootScope.$broadcast).toHaveBeenCalledWith('newMessage', tweet);
 
   });
 
@@ -112,7 +112,7 @@ describe('Service: tweetservice', function () {
     spyOn($rootScope, '$broadcast').andCallThrough();
     angular.forEach(tweets, function(tweet){
       tweetservice.processTweet(tweet);
-      expect($rootScope.$broadcast).not.toHaveBeenCalledWith('new_tweet', tweet);
+      expect($rootScope.$broadcast).not.toHaveBeenCalledWith('newMessage', tweet);
     });
   });
 

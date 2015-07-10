@@ -8,11 +8,9 @@ angular.module('twittexpressApp')
       controller: function ($scope) {
         $scope.$on('new_tweet', function(event, msg){
           $scope.msg = msg;
-
           $timeout(function (){
             $scope.msg = null;
           },CONFIG.time);
-
           $scope.$apply();
         });
       }

@@ -5,7 +5,7 @@ describe('Controller: MainCtrl', function () {
   // load the controller's module
   beforeEach(module('twittexpressApp'));
 
-  var MainCtrl, scope, $controller, $timeout;
+  var MainCtrl, scope, $controller, $timeout, tweetservice;
 
   var QueueServiceMock = {
     loadManifest: function(){},
@@ -25,26 +25,24 @@ describe('Controller: MainCtrl', function () {
   };
 
   // Initialize the controller and a mock scope
-  beforeEach(inject(function (_$controller_, $rootScope, _$timeout_) {
+  beforeEach(inject(function (_$controller_, $rootScope, _$timeout_, _tweetservice_, CONFIG) {
 
     scope = $rootScope.$new();
     $controller = _$controller_;
     $timeout = _$timeout_;
+    tweetservice = _tweetservice_;
 
     MainCtrl = $controller('MainCtrl', {
       $scope: scope,
-      QueueService: QueueServiceMock
+      QueueService: QueueServiceMock,
+      CONFIG: CONFIG
     });
   }));
 
   it('should get a list of slides from the QueueService', function () {
-    $controller('MainCtrl', {
-      $scope: scope,
-      QueueService: QueueServiceMock
-    });
-
     expect(scope.loaded).toBeFalsy();
     scope.$broadcast('queueComplete');
+
     expect(scope.loaded).toBeTruthy();
   });
 
@@ -52,7 +50,6 @@ describe('Controller: MainCtrl', function () {
       scope.$broadcast('queueProgress', {progress: 1});
 
       expect(scope.progress).toBe(100);
-
   });
 
   it('should set loaded to true on queueComplete', function () {
@@ -69,5 +66,4 @@ describe('Controller: MainCtrl', function () {
       $timeout.flush();
       expect(scope.currentIndex).toBe(1);
   });
-
 });
