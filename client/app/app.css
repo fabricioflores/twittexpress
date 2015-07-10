@@ -45,10 +45,7 @@ body {
 .xlarge {
     position: absolute;
     bottom: 50px;
-    font-family: 'Oswald', serif;
     font-size: 248px;
-    color: #FFF; /* Fallback for older browsers */
-    color: rgba(255, 255, 255, 0.3);
     width: 100%;
     white-space: nowrap;
     overflow: hidden;
@@ -57,7 +54,6 @@ body {
 .title {
     position: absolute;
     bottom: 200px;
-    font-family: 'Tangerine', serif;
     font-size: 196px;
     color: #FFF;
     width: 100%;
@@ -66,7 +62,6 @@ body {
 .subtitle {
     position: absolute;
     bottom: 100px;
-    font-family: 'Tangerine', serif;
     font-size: 144px;
     color: #FFF;
     width: 100%;

@@ -50,8 +50,9 @@ angular.module('twittexpressApp')
         $scope.$on('newMessage', function (event, msg) {
 
             swal({ // jshint ignore:line
-                title: '<div class= "row"><div class="col-sm-6">'+ msg.id + '</div> <div class="col-sm-6">'+ msg.user.screen_name +'</div> </div>',
+                title: msg.user.name + ' <small>@'+ msg.user.screen_name + '</small>',
                 text: msg.text,
+                imageUrl: msg.user.profile_image_url_https,
                 timer: CONFIG.time,
                 showConfirmButton: false,
                 html: true
